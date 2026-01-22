@@ -99,6 +99,17 @@ In this repository, I will:
 ✔ Tested using Postman
 ✔ Fixed package mismatch issues
 
+### Day 03 — Service Layer (Clean Architecture)
+
+✔ Introduced Service layer
+✔ Separated business logic from controller
+✔ Implemented UserService
+✔ Used @Service annotation
+✔ Implemented constructor-based dependency injection
+✔ Refactored controller to be thin
+✔ Applied clean architecture principles
+✔ Improved code structure for scalability
+
 ---
 
 ## 📌 Status Tracker
@@ -107,8 +118,8 @@ In this repository, I will:
 | ------ | -------------- | --------- |
 | Day 01 | Setup & Run    | ✅ Done    |
 | Day 02 | REST CRUD      | ✅ Done    |
-| Day 03 | Service Layer  | 🔜 Next   |
-| Day 04 | Database (JPA) | ⏳ Planned |
+| Day 03 | Service Layer  | ✅ Done    |
+| Day 04 | Database (JPA) | 🔜 Next    |
 | Day 05 | Validation     | ⏳ Planned |
 | Day 06 | Security       | ⏳ Planned |
 
