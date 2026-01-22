@@ -1,52 +1,44 @@
 package com.isanjalee.demo.springbootdemo.controller;
 
 import com.isanjalee.demo.springbootdemo.model.User;
+import com.isanjalee.demo.springbootdemo.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
-    private List<User> users = new ArrayList<>();
-    private Long idCounter = 1L;
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping
     public List<User> getAll() {
-        return users;
+        return userService.getAllUsers();
     }
 
     @PostMapping
     public User create(@RequestBody User user) {
-        user.setId(idCounter++);
-        users.add(user);
-        return user;
+        return userService.createUser(user);
     }
 
     @GetMapping("/{id}")
     public User getOne(@PathVariable Long id) {
-        return users.stream()
-                .filter(u -> u.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+        return userService.getUserById(id);
     }
 
     @PutMapping("/{id}")
-    public User update(@PathVariable Long id, @RequestBody User newUser) {
-        for (User u : users) {
-            if (u.getId().equals(id)) {
-                u.setName(newUser.getName());
-                u.setEmail(newUser.getEmail());
-                return u;
-            }
-        }
-        return null;
+    public User update(@PathVariable Long id, @RequestBody User user) {
+        return userService.updateUser(id, user);
     }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Long id) {
-        users.removeIf(u -> u.getId().equals(id));
+        userService.deleteUser(id);
         return "User deleted";
     }
 }
