@@ -110,6 +110,16 @@ In this repository, I will:
 ✔ Applied clean architecture principles
 ✔ Improved code structure for scalability
 
+### Day 04 — Database Integration (JPA)
+
+✔ Introduced Spring Data JPA
+✔ Connected application to database (H2)
+✔ Converted model to JPA Entity using @Entity
+✔ Used @Id and @GeneratedValue for primary key
+✔ Created Repository layer using JpaRepository
+✔ Replaced in-memory list with real database persistence
+✔ Verified data using H2 Console
+✔ Kept controller unchanged (proved clean architecture works)
 ---
 
 ## 📌 Status Tracker
@@ -119,8 +129,8 @@ In this repository, I will:
 | Day 01 | Setup & Run    | ✅ Done    |
 | Day 02 | REST CRUD      | ✅ Done    |
 | Day 03 | Service Layer  | ✅ Done    |
-| Day 04 | Database (JPA) | 🔜 Next    |
-| Day 05 | Validation     | ⏳ Planned |
+| Day 04 | Database (JPA) | ✅ Done    |
+| Day 05 | Validation     | 🔜 Next |
 | Day 06 | Security       | ⏳ Planned |
 
 ---
