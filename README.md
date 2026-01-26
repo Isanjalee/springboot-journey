@@ -120,6 +120,7 @@ In this repository, I will:
 ✔ Replaced in-memory list with real database persistence
 ✔ Verified data using H2 Console
 ✔ Kept controller unchanged (proved clean architecture works)
+
 ---
 
 ## 📌 Status Tracker
