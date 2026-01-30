@@ -1,7 +1,10 @@
 package com.isanjalee.demo.springbootdemo.controller;
 
+import com.isanjalee.demo.springbootdemo.dto.UserRequest;
+import com.isanjalee.demo.springbootdemo.dto.UserResponse;
 import com.isanjalee.demo.springbootdemo.model.User;
 import com.isanjalee.demo.springbootdemo.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,28 +19,28 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping
-    public List<User> getAll() {
-        return userService.getAllUsers();
-    }
-
     @PostMapping
-    public User create(@RequestBody User user) {
-        return userService.createUser(user);
+    public UserResponse createUser(@Valid @RequestBody UserRequest request) {
+        return userService.createUser(request);
     }
 
     @GetMapping("/{id}")
-    public User getOne(@PathVariable Long id) {
+    public UserResponse getUserById(@PathVariable Long id) {
         return userService.getUserById(id);
     }
 
+    @GetMapping
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
+    }
+
     @PutMapping("/{id}")
-    public User update(@PathVariable Long id, @RequestBody User user) {
-        return userService.updateUser(id, user);
+    public UserResponse updateUser(@PathVariable Long id, @Valid @RequestBody UserRequest request) {
+        return userService.updateUser(id, request);
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable Long id) {
+    public String deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return "User deleted";
     }
