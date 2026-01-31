@@ -1,9 +1,10 @@
 package com.isanjalee.demo.springbootdemo.service;
 
-import com.isanjalee.demo.springbootdemo.dto.UserRequest;
+import com.isanjalee.demo.springbootdemo.dto.UserCreateRequest;
 import com.isanjalee.demo.springbootdemo.dto.UserResponse;
 import com.isanjalee.demo.springbootdemo.model.User;
 import com.isanjalee.demo.springbootdemo.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,42 +13,39 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    public UserResponse createUser(UserRequest request) {
+    // ADMIN creates USER
+    public UserResponse createUser(UserCreateRequest request) {
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new RuntimeException("Email already exists");
+        }
+
         User user = new User();
         user.setName(request.getName());
         user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword())); // BCrypt
+        user.setRole("USER"); // default role
 
         User saved = userRepository.save(user);
 
-        return new UserResponse(saved.getId(), saved.getName(), saved.getEmail());
+        return new UserResponse(saved.getId(), saved.getName(), saved.getEmail(), saved.getRole());
     }
 
     public UserResponse getUserById(Long id) {
-        User user = userRepository.findById(id)
+        User u = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
-
-        return new UserResponse(user.getId(), user.getName(), user.getEmail());
+        return new UserResponse(u.getId(), u.getName(), u.getEmail(), u.getRole());
     }
 
     public List<User> getAllUsers() {
+        // If you want DTO list, we can change this later. Keeping simple.
         return userRepository.findAll();
-    }
-
-    public UserResponse updateUser(Long id, UserRequest request) {
-        User existing = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
-
-        existing.setName(request.getName());
-        existing.setEmail(request.getEmail());
-
-        User saved = userRepository.save(existing);
-
-        return new UserResponse(saved.getId(), saved.getName(), saved.getEmail());
     }
 
     public void deleteUser(Long id) {

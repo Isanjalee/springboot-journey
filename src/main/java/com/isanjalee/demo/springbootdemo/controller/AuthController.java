@@ -1,27 +1,24 @@
 package com.isanjalee.demo.springbootdemo.controller;
 
-import com.isanjalee.demo.springbootdemo.dto.*;
-import com.isanjalee.demo.springbootdemo.security.JwtUtil;
+import com.isanjalee.demo.springbootdemo.dto.LoginRequest;
+import com.isanjalee.demo.springbootdemo.dto.LoginResponse;
+import com.isanjalee.demo.springbootdemo.service.AuthService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final JwtUtil jwtUtil;
+    private final AuthService authService;
 
-    public AuthController(JwtUtil jwtUtil) {
-        this.jwtUtil = jwtUtil;
+    public AuthController(AuthService authService) {
+        this.authService = authService;
     }
 
     @PostMapping("/login")
-    public AuthResponse login(@RequestBody LoginRequest request) {
-
-        // TEMP: hardcoded user (for learning)
-        if ("admin".equals(request.username) && "admin123".equals(request.password)) {
-            String token = jwtUtil.generateToken(request.username);
-            return new AuthResponse(token);
-        }
-        throw new RuntimeException("Invalid credentials");
+    public LoginResponse login(@Valid @RequestBody LoginRequest request) {
+        String token = authService.login(request);
+        return new LoginResponse(token);
     }
 }

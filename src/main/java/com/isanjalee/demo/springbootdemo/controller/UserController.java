@@ -1,10 +1,11 @@
 package com.isanjalee.demo.springbootdemo.controller;
 
-import com.isanjalee.demo.springbootdemo.dto.UserRequest;
+import com.isanjalee.demo.springbootdemo.dto.UserCreateRequest;
 import com.isanjalee.demo.springbootdemo.dto.UserResponse;
 import com.isanjalee.demo.springbootdemo.model.User;
 import com.isanjalee.demo.springbootdemo.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,28 +20,28 @@ public class UserController {
         this.userService = userService;
     }
 
+    // ADMIN only creates users
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public UserResponse createUser(@Valid @RequestBody UserRequest request) {
+    public UserResponse create(@Valid @RequestBody UserCreateRequest request) {
         return userService.createUser(request);
     }
 
+    // any authenticated can read (or you can restrict later)
     @GetMapping("/{id}")
-    public UserResponse getUserById(@PathVariable Long id) {
+    public UserResponse getById(@PathVariable Long id) {
         return userService.getUserById(id);
     }
 
     @GetMapping
-    public List<User> getAllUsers() {
+    public List<User> getAll() {
         return userService.getAllUsers();
     }
 
-    @PutMapping("/{id}")
-    public UserResponse updateUser(@PathVariable Long id, @Valid @RequestBody UserRequest request) {
-        return userService.updateUser(id, request);
-    }
-
+    // ADMIN only delete
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public String deleteUser(@PathVariable Long id) {
+    public String delete(@PathVariable Long id) {
         userService.deleteUser(id);
         return "User deleted";
     }
