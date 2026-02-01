@@ -2,6 +2,7 @@ package com.isanjalee.demo.springbootdemo.service;
 
 import com.isanjalee.demo.springbootdemo.dto.UserCreateRequest;
 import com.isanjalee.demo.springbootdemo.dto.UserResponse;
+import com.isanjalee.demo.springbootdemo.dto.UserUpdateRequest;
 import com.isanjalee.demo.springbootdemo.model.User;
 import com.isanjalee.demo.springbootdemo.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -51,4 +52,30 @@ public class UserService {
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
+
+    public UserResponse updateUser(Long id, UserUpdateRequest request) {
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        user.setName(request.getName());
+        user.setEmail(request.getEmail());
+
+        userRepository.save(user);
+
+        return mapToResponse(user);
+    }
+
+    private UserResponse mapToResponse(User user) {
+
+        UserResponse response = new UserResponse();
+
+        response.setId(user.getId());
+        response.setName(user.getName());
+        response.setEmail(user.getEmail());
+        response.setRole(user.getRole());
+
+        return response;
+    }
+
 }

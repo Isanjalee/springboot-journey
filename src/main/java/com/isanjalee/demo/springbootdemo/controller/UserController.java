@@ -2,6 +2,7 @@ package com.isanjalee.demo.springbootdemo.controller;
 
 import com.isanjalee.demo.springbootdemo.dto.UserCreateRequest;
 import com.isanjalee.demo.springbootdemo.dto.UserResponse;
+import com.isanjalee.demo.springbootdemo.dto.UserUpdateRequest;
 import com.isanjalee.demo.springbootdemo.model.User;
 import com.isanjalee.demo.springbootdemo.service.UserService;
 import jakarta.validation.Valid;
@@ -27,7 +28,6 @@ public class UserController {
         return userService.createUser(request);
     }
 
-    // any authenticated can read (or you can restrict later)
     @GetMapping("/{id}")
     public UserResponse getById(@PathVariable Long id) {
         return userService.getUserById(id);
@@ -45,4 +45,15 @@ public class UserController {
         userService.deleteUser(id);
         return "User deleted";
     }
+
+    // ADMIN only updates
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public UserResponse updateUser(
+            @PathVariable Long id,
+            @Valid @RequestBody UserUpdateRequest request) {
+
+        return userService.updateUser(id, request);
+    }
+
 }
