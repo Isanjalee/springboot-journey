@@ -306,6 +306,3 @@ GET /users/search?name=isa&page=0&size=5
 ## 📌 Note
 This is not a perfect project — it is a **learning story**.  
 Mistakes, fixes, and understanding are part of the journey.
-
-
-Just tell me 😊
