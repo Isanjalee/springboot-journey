@@ -7,6 +7,8 @@ import com.isanjalee.demo.springbootdemo.model.User;
 import com.isanjalee.demo.springbootdemo.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -44,11 +46,6 @@ public class UserService {
         return new UserResponse(u.getId(), u.getName(), u.getEmail(), u.getRole());
     }
 
-    public List<User> getAllUsers() {
-        // If you want DTO list, we can change this later. Keeping simple.
-        return userRepository.findAll();
-    }
-
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
@@ -66,15 +63,30 @@ public class UserService {
         return mapToResponse(user);
     }
 
+    // Get all users with pagination + sorting (DTO)
+    public Page<UserResponse> getAllUsers(Pageable pageable) {
+        return userRepository.findAll(pageable)
+                .map(this::mapToResponse);
+    }
+
+    // Search users by name (DTO)
+    public Page<UserResponse> searchUsersByName(String name, Pageable pageable) {
+        return userRepository.findByNameContainingIgnoreCase(name, pageable)
+                .map(this::mapToResponse);
+    }
+
+    // Search users by email (DTO)
+    public Page<UserResponse> searchUsersByEmail(String email, Pageable pageable) {
+        return userRepository.findByEmailContainingIgnoreCase(email, pageable)
+                .map(this::mapToResponse);
+    }
+
     private UserResponse mapToResponse(User user) {
-
         UserResponse response = new UserResponse();
-
         response.setId(user.getId());
         response.setName(user.getName());
         response.setEmail(user.getEmail());
         response.setRole(user.getRole());
-
         return response;
     }
 
