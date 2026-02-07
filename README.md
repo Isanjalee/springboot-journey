@@ -184,7 +184,17 @@ In this repository, I:
 ✔ Built scalable API design  
 
 ---
+🟢 Day 10 — Logging & Production Observability
+✔ Introduced application logging using SLF4J + Logback
+✔ Added logging inside Service layer for business events
+✔ Added logging inside Controller layer for API request tracking
+✔ Logged authentication and login attempts
+✔ Implemented exception logging inside Global Exception Handler
+✔ Configured log levels using application.properties
+✔ Learned importance of logging in real production systems
+✔ Understood difference between log levels: INFO, DEBUG, ERROR, WARN
 
+---
 # 📌 Status Tracker
 
 | Day | Topic | Status |
