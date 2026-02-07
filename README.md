@@ -193,7 +193,33 @@ In this repository, I:
 ✔ Configured log levels using application.properties  
 ✔ Learned importance of logging in real production systems  
 ✔ Understood difference between log levels: INFO, DEBUG, ERROR, WARN  
- 
+
+ ---
+## 🟢 Day 11 — API Documentation & Developer Experience
+✔ Integrated Swagger / OpenAPI using SpringDoc  
+✔ Enabled Swagger UI for API testing and developer usage  
+✔ Configured API documentation endpoint /swagger-ui.html  
+✔ Learned how API documentation helps frontend teams and external consumers  
+✔ Understood OpenAPI specification basics  
+✔ Learned version compatibility importance (Spring Boot vs SpringDoc)  
+✔ Fixed Swagger runtime compatibility issue (ControllerAdviceBean error)  
+✔ Learned dependency management and version alignment in Maven  
+✔ Verified API endpoints using Swagger UI instead of Postman
+
+---
+## 🟢 Day 12 — Production Configuration, Profiles & Environment Separation
+
+✔ Introduced Spring Profiles (dev, prod, test)  
+✔ Learned why environment separation is critical in real production systems  
+✔ Created application-dev.properties for development environment  
+✔ Prepared structure for application-prod.properties for production deployment  
+✔ Configured profile-based database switching (H2 → PostgreSQL ready)  
+✔ Learned how to run Spring Boot using profile activation (Maven + JVM args)  
+✔ Fixed Maven profile command mistakes and understood correct syntax  
+✔ Learned importance of environment-based secrets and configuration isolation  
+✔ Verified profile activation using startup logs  
+✔ Prepared project for real-world deployment environments
+
 
 ---
 
@@ -211,6 +237,8 @@ In this repository, I:
 | Day 08 | Security Hardening | ✅ Done |
 | Day 09 | Pagination & Search | ✅ Done |
 | Day 10 |  Logging & Production Observability | ✅ Done |
+| Day 11 |  Swagger & API Documentation | ✅ Done |
+| Day 12 |  Production Readiness & Monitoring | ✅ Done |
 
 ---
 
