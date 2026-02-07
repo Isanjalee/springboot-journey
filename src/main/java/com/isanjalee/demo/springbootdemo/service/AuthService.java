@@ -6,9 +6,13 @@ import com.isanjalee.demo.springbootdemo.repository.UserRepository;
 import com.isanjalee.demo.springbootdemo.security.JwtUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class AuthService {
+
+    private static final Logger log = LoggerFactory.getLogger(AuthService.class);
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -21,6 +25,7 @@ public class AuthService {
     }
 
     public String login(LoginRequest request) {
+        log.info("Login attempt for user: {}", request.getEmail());
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("Invalid credentials"));
 
@@ -28,6 +33,8 @@ public class AuthService {
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new RuntimeException("Invalid credentials");
         }
+
+        log.info("Login success for user: {}", request.getEmail());
 
         // roles in token
         return jwtUtil.generateToken(user.getEmail(), user.getRole());

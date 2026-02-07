@@ -10,12 +10,15 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
+    private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -25,6 +28,7 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public UserResponse create(@Valid @RequestBody UserCreateRequest request) {
+        log.info("API Request → Create User");
         return userService.createUser(request);
     }
 
