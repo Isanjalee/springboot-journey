@@ -7,6 +7,8 @@ import com.isanjalee.demo.springbootdemo.model.User;
 import com.isanjalee.demo.springbootdemo.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.slf4j.Logger;
@@ -26,6 +28,7 @@ public class UserService {
     }
 
     // ADMIN creates USER
+    @CacheEvict(value = { "usersList" }, allEntries = true)
     public UserResponse createUser(UserCreateRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("Email already exists");
@@ -46,16 +49,19 @@ public class UserService {
         return new UserResponse(saved.getId(), saved.getName(), saved.getEmail(), saved.getRole());
     }
 
+    @Cacheable(value = "users", key = "#id")
     public UserResponse getUserById(Long id) {
         User u = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
         return new UserResponse(u.getId(), u.getName(), u.getEmail(), u.getRole());
     }
 
+    @CacheEvict(value = { "users", "usersList" }, key = "#id", allEntries = true)
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
 
+    @CacheEvict(value = { "users", "usersList" }, key = "#id", allEntries = true)
     public UserResponse updateUser(Long id, UserUpdateRequest request) {
 
         User user = userRepository.findById(id)
@@ -70,6 +76,7 @@ public class UserService {
     }
 
     // Get all users with pagination + sorting (DTO)
+    @Cacheable(value = "usersList")
     public Page<UserResponse> getAllUsers(Pageable pageable) {
         return userRepository.findAll(pageable)
                 .map(this::mapToResponse);
