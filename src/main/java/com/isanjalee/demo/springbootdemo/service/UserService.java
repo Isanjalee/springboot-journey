@@ -28,7 +28,7 @@ public class UserService {
     }
 
     // ADMIN creates USER
-    @CacheEvict(value = { "userById", "usersPage" }, allEntries = true)
+    @CacheEvict(value = { "userById", "usersList" }, allEntries = true)
     public UserResponse createUser(UserCreateRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("Email already exists");
@@ -39,68 +39,65 @@ public class UserService {
         User user = new User();
         user.setName(request.getName());
         user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword())); // BCrypt
-        user.setRole("USER"); // default role
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setRole("USER");
 
         User saved = userRepository.save(user);
 
-        log.info("User created successfully: {}", user.getEmail());
+        log.info("User created successfully: {}", saved.getEmail());
 
-        return new UserResponse(saved.getId(), saved.getName(), saved.getEmail(), saved.getRole());
+        return mapToResponse(saved);
     }
 
-    @Cacheable(value = "userById", key = "#id")
+    @Cacheable(cacheNames = "userById", key = "#id")
     public UserResponse getUserById(Long id) {
+        log.info("DB hit: getUserById({})", id);
+
         User u = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
-        return new UserResponse(u.getId(), u.getName(), u.getEmail(), u.getRole());
+
+        return mapToResponse(u);
     }
 
-    @CacheEvict(value = { "userById", "usersPage" }, allEntries = true)
-    public void deleteUser(Long id) {
-        userRepository.deleteById(id);
-    }
-
-    @CacheEvict(value = { "userById", "usersPage" }, allEntries = true)
+    @CacheEvict(value = { "userById", "usersList" }, allEntries = true)
     public UserResponse updateUser(Long id, UserUpdateRequest request) {
-
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         user.setName(request.getName());
         user.setEmail(request.getEmail());
 
-        userRepository.save(user);
+        User saved = userRepository.save(user);
 
-        return mapToResponse(user);
+        return mapToResponse(saved);
     }
 
-    // Get all users with pagination + sorting (DTO)
-    @Cacheable(value = "usersList")
+    @CacheEvict(value = { "userById", "usersList" }, allEntries = true)
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    // Cache pages correctly (key includes page, size, sort)
+    @Cacheable(cacheNames = "usersPage", key = "#pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort.toString()")
     public Page<UserResponse> getAllUsers(Pageable pageable) {
+        log.info("DB hit: getAllUsers({})", pageable);
+
         return userRepository.findAll(pageable)
                 .map(this::mapToResponse);
     }
 
-    // Search users by name (DTO)
     public Page<UserResponse> searchUsersByName(String name, Pageable pageable) {
         return userRepository.findByNameContainingIgnoreCase(name, pageable)
                 .map(this::mapToResponse);
     }
 
-    // Search users by email (DTO)
     public Page<UserResponse> searchUsersByEmail(String email, Pageable pageable) {
         return userRepository.findByEmailContainingIgnoreCase(email, pageable)
                 .map(this::mapToResponse);
     }
 
     private UserResponse mapToResponse(User user) {
-        UserResponse response = new UserResponse();
-        response.setId(user.getId());
-        response.setName(user.getName());
-        response.setEmail(user.getEmail());
-        response.setRole(user.getRole());
-        return response;
+        return new UserResponse(user.getId(), user.getName(), user.getEmail(), user.getRole());
     }
 
 }

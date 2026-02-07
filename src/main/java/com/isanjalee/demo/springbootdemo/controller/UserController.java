@@ -5,11 +5,15 @@ import com.isanjalee.demo.springbootdemo.dto.UserResponse;
 import com.isanjalee.demo.springbootdemo.dto.UserUpdateRequest;
 import com.isanjalee.demo.springbootdemo.service.UserService;
 import jakarta.validation.Valid;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,57 +31,73 @@ public class UserController {
     // ADMIN only creates users
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public UserResponse create(@Valid @RequestBody UserCreateRequest request) {
+    public ResponseEntity<UserResponse> create(@Valid @RequestBody UserCreateRequest request) {
         log.info("API Request → Create User");
-        return userService.createUser(request);
+
+        UserResponse created = userService.createUser(request);
+
+        // Location header should be absolute/relative to this resource path
+        URI location = URI.create("/users/" + created.getId());
+
+        // 201 Created
+        return ResponseEntity.created(location).body(created);
     }
 
-    @GetMapping("/{id}")
-    public UserResponse getById(@PathVariable Long id) {
-        return userService.getUserById(id);
-    }
-
-    @GetMapping
+    // 200 OK
     @PreAuthorize("hasRole('ADMIN')")
-    public Page<UserResponse> getAllUsers(
-            @PageableDefault(size = 5, sort = "id") Pageable pageable) {
-        return userService.getAllUsers(pageable);
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponse> getById(@PathVariable Long id) {
+        UserResponse user = userService.getUserById(id);
+        return ResponseEntity.ok(user);
     }
 
-    // ADMIN only delete
+    // 200 OK
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping
+    public ResponseEntity<Page<UserResponse>> getAllUsers(
+            @PageableDefault(size = 5, sort = "id") Pageable pageable) {
+
+        Page<UserResponse> page = userService.getAllUsers(pageable);
+        return ResponseEntity.ok(page);
+    }
+
+    // 204 No Content (BEST PRACTICE)
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         userService.deleteUser(id);
-        return "User deleted";
+        return ResponseEntity.noContent().build();
     }
 
-    // ADMIN only updates
-    @PutMapping("/{id}")
+    // 200 OK (since we return updated entity)
     @PreAuthorize("hasRole('ADMIN')")
-    public UserResponse updateUser(
+    @PutMapping("/{id}")
+    public ResponseEntity<UserResponse> updateUser(
             @PathVariable Long id,
             @Valid @RequestBody UserUpdateRequest request) {
 
-        return userService.updateUser(id, request);
+        UserResponse updated = userService.updateUser(id, request);
+        return ResponseEntity.ok(updated);
     }
 
-    @GetMapping("/search")
+    // 200 OK
     @PreAuthorize("hasRole('ADMIN')")
-    public Page<UserResponse> searchUsers(
+    @GetMapping("/search")
+    public ResponseEntity<Page<UserResponse>> searchUsers(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String email,
             @PageableDefault(size = 5, sort = "id") Pageable pageable) {
+
+        Page<UserResponse> result;
+
         if (name != null && !name.trim().isEmpty()) {
-            return userService.searchUsersByName(name.trim(), pageable);
+            result = userService.searchUsersByName(name.trim(), pageable);
+        } else if (email != null && !email.trim().isEmpty()) {
+            result = userService.searchUsersByEmail(email.trim(), pageable);
+        } else {
+            result = userService.getAllUsers(pageable);
         }
 
-        if (email != null && !email.trim().isEmpty()) {
-            return userService.searchUsersByEmail(email.trim(), pageable);
-        }
-
-        // If no filters provided, return all
-        return userService.getAllUsers(pageable);
+        return ResponseEntity.ok(result);
     }
-
 }
