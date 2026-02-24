@@ -208,7 +208,6 @@ In this repository, I:
 
 ---
 ## 🟢 Day 12 — Production Configuration, Profiles & Environment Separation
-
 ✔ Introduced Spring Profiles (dev, prod, test)  
 ✔ Learned why environment separation is critical in real production systems  
 ✔ Created application-dev.properties for development environment  
@@ -219,6 +218,19 @@ In this repository, I:
 ✔ Learned importance of environment-based secrets and configuration isolation  
 ✔ Verified profile activation using startup logs  
 ✔ Prepared project for real-world deployment environments
+
+---
+## 🟢 Day 13 — Professional Exception Handling & Error Architecture
+✔ Removed generic `RuntimeException` usage  
+✔ Implemented custom domain exceptions (`ResourceNotFoundException`, `DuplicateResourceException`)  
+✔ Designed structured `ErrorResponse` DTO  
+✔ Implemented global exception mapping using `@RestControllerAdvice`  
+✔ Returned proper HTTP status codes (404, 409, 400, 500)  
+✔ Ensured consistent error response format across entire API  
+✔ Prevented stack trace leakage in production responses  
+✔ Separated business exceptions from system exceptions  
+✔ Applied clean separation of concerns (Controller → Service → Exception Handler)  
+✔ Upgraded API to production-grade error handling architecture  
 
 
 ---
