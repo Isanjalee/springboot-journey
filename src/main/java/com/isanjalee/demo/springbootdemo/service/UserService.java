@@ -3,6 +3,8 @@ package com.isanjalee.demo.springbootdemo.service;
 import com.isanjalee.demo.springbootdemo.dto.UserCreateRequest;
 import com.isanjalee.demo.springbootdemo.dto.UserResponse;
 import com.isanjalee.demo.springbootdemo.dto.UserUpdateRequest;
+import com.isanjalee.demo.springbootdemo.exception.DuplicateResourceException;
+import com.isanjalee.demo.springbootdemo.exception.ResourceNotFoundException;
 import com.isanjalee.demo.springbootdemo.model.User;
 import com.isanjalee.demo.springbootdemo.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,7 +33,7 @@ public class UserService {
     @CacheEvict(value = { "userById", "usersList" }, allEntries = true)
     public UserResponse createUser(UserCreateRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email already exists");
+           throw new DuplicateResourceException("Email already exists: " + request.getEmail());
         }
 
         log.info("Creating user with email: {}", request.getEmail());
@@ -54,7 +56,7 @@ public class UserService {
         log.info("DB hit: getUserById({})", id);
 
         User u = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
 
         return mapToResponse(u);
     }
@@ -62,7 +64,7 @@ public class UserService {
     @CacheEvict(value = { "userById", "usersList" }, allEntries = true)
     public UserResponse updateUser(Long id, UserUpdateRequest request) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
 
         user.setName(request.getName());
         user.setEmail(request.getEmail());
