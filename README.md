@@ -239,6 +239,7 @@ In this repository, I:
 | Day 10 |  Logging & Production Observability | ✅ Done |
 | Day 11 |  Swagger & API Documentation | ✅ Done |
 | Day 12 |  Production Readiness & Monitoring | ✅ Done |
+| Day 13 |  Professional Exception Handling with Custom Exceptions | ✅ Done |
 
 ---
 
