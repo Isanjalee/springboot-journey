@@ -232,6 +232,17 @@ In this repository, I:
 ✔ Applied clean separation of concerns (Controller → Service → Exception Handler)  
 ✔ Upgraded API to production-grade error handling architecture  
 
+## 🟢 Day 14 — Unit Testing with JUnit & Mockito
+✔ Introduced unit testing using JUnit 5  
+✔ Implemented Service layer testing  
+✔ Used Mockito for dependency mocking  
+✔ Mocked `UserRepository` and `PasswordEncoder`  
+✔ Tested business logic success scenarios  
+✔ Tested exception scenarios using `assertThrows()`  
+✔ Verified repository interactions using `verify()`  
+✔ Learned difference between unit testing and integration testing  
+✔ Understood importance of test isolation  
+✔ Strengthened backend interview preparation  
 
 ---
 
@@ -248,10 +259,11 @@ In this repository, I:
 | Day 07 | RBAC | ✅ Done |
 | Day 08 | Security Hardening | ✅ Done |
 | Day 09 | Pagination & Search | ✅ Done |
-| Day 10 |  Logging & Production Observability | ✅ Done |
-| Day 11 |  Swagger & API Documentation | ✅ Done |
-| Day 12 |  Production Readiness & Monitoring | ✅ Done |
-| Day 13 |  Professional Exception Handling with Custom Exceptions | ✅ Done |
+| Day 10 | Logging & Production Observability | ✅ Done |
+| Day 11 | Swagger & API Documentation | ✅ Done |
+| Day 12 | Production Readiness & Monitoring | ✅ Done |
+| Day 13 | Professional Exception Handling with Custom Exceptions | ✅ Done |
+| Day 14 | Unit Testing with JUnit & Mockito | ✅ Done |
 
 ---
 
