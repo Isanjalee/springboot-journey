@@ -5,6 +5,7 @@ import com.isanjalee.demo.springbootdemo.model.User;
 import com.isanjalee.demo.springbootdemo.repository.UserRepository;
 import com.isanjalee.demo.springbootdemo.security.JwtUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,11 +28,11 @@ public class AuthService {
     public String login(LoginRequest request) {
         log.info("Login attempt for user: {}", request.getEmail());
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("Invalid credentials"));
+                .orElseThrow(() -> new BadCredentialsException("Invalid credentials"));
 
         // compare raw password with hashed password
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid credentials");
+            throw new BadCredentialsException("Invalid credentials");
         }
 
         log.info("Login success for user: {}", request.getEmail());
