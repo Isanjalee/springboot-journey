@@ -244,6 +244,41 @@ In this repository, I:
 ✔ Understood importance of test isolation  
 ✔ Strengthened backend interview preparation  
 
+## 🟢 Day 15 — Integration Testing, Security Testing & Test Suite Expansion
+
+✔ Fixed broken `UserControllerIntegrationTest` structure and imports so it compiles correctly  
+✔ Added `spring-security-test` support for controller integration testing  
+✔ Expanded API integration tests to cover all current endpoints:
+&nbsp;&nbsp;&nbsp;&nbsp;• `UserController`  
+&nbsp;&nbsp;&nbsp;&nbsp;• `AuthController`  
+&nbsp;&nbsp;&nbsp;&nbsp;• `HelloController`  
+
+✔ Added success and failure-path API tests covering common HTTP responses:
+&nbsp;&nbsp;&nbsp;&nbsp;• `200` — Success  
+&nbsp;&nbsp;&nbsp;&nbsp;• `201` — Resource Created  
+&nbsp;&nbsp;&nbsp;&nbsp;• `204` — Resource Deleted  
+&nbsp;&nbsp;&nbsp;&nbsp;• `400` — Validation Errors  
+&nbsp;&nbsp;&nbsp;&nbsp;• `401` — Unauthenticated Requests  
+&nbsp;&nbsp;&nbsp;&nbsp;• `403` — Unauthorized Role Access  
+&nbsp;&nbsp;&nbsp;&nbsp;• `404` — Resource Not Found  
+&nbsp;&nbsp;&nbsp;&nbsp;• `409` — Duplicate Resource Conflict  
+
+✔ Updated authentication error handling so invalid login returns **401 Unauthorized** instead of **500 Internal Server Error**  
+✔ Added authentication and access-denied exception handling in the global exception handler  
+✔ Cleaned malformed `HelloWorldTest` and restored it as a proper JUnit test  
+✔ Expanded `UserServiceTest` to cover all public service methods:
+&nbsp;&nbsp;&nbsp;&nbsp;• create user  
+&nbsp;&nbsp;&nbsp;&nbsp;• get user by id  
+&nbsp;&nbsp;&nbsp;&nbsp;• update user  
+&nbsp;&nbsp;&nbsp;&nbsp;• delete user  
+&nbsp;&nbsp;&nbsp;&nbsp;• list users  
+&nbsp;&nbsp;&nbsp;&nbsp;• search users by name  
+&nbsp;&nbsp;&nbsp;&nbsp;• search users by email  
+
+✔ Improved unit test setup using `MockitoExtension` instead of manual mock initialization  
+✔ Verified test suite execution using Maven commands:
+
+
 ---
 
 # 📌 Status Tracker
@@ -264,6 +299,7 @@ In this repository, I:
 | Day 12 | Production Readiness & Monitoring | ✅ Done |
 | Day 13 | Professional Exception Handling with Custom Exceptions | ✅ Done |
 | Day 14 | Unit Testing with JUnit & Mockito | ✅ Done |
+| Day 15 | Integration Testing & Test Suite Expansion | ✅ Done |
 
 ---
 
