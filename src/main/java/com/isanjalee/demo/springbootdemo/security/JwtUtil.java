@@ -1,8 +1,8 @@
 package com.isanjalee.demo.springbootdemo.security;
 
+import com.isanjalee.demo.springbootdemo.config.JwtProperties;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -14,11 +14,9 @@ public class JwtUtil {
     private final Key key;
     private final long expiryMs;
 
-    public JwtUtil(
-            @Value("${app.jwt.secret}") String secret,
-            @Value("${app.jwt.expiry-ms}") long expiryMs) {
-        this.key = Keys.hmacShaKeyFor(secret.getBytes());
-        this.expiryMs = expiryMs;
+    public JwtUtil(JwtProperties jwtProperties) {
+        this.key = Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes());
+        this.expiryMs = jwtProperties.getExpiryMs();
     }
 
     public String generateToken(String email, String role) {
