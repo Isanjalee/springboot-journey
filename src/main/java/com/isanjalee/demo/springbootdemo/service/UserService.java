@@ -30,7 +30,7 @@ public class UserService {
     }
 
     // ADMIN creates USER
-    @CacheEvict(value = { "userById", "usersList" }, allEntries = true)
+    @CacheEvict(value = { "userById", "usersPage" }, allEntries = true)
     public UserResponse createUser(UserCreateRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
            throw new DuplicateResourceException("Email already exists: " + request.getEmail());
@@ -61,10 +61,15 @@ public class UserService {
         return mapToResponse(u);
     }
 
-    @CacheEvict(value = { "userById", "usersList" }, allEntries = true)
+    @CacheEvict(value = { "userById", "usersPage" }, allEntries = true)
     public UserResponse updateUser(Long id, UserUpdateRequest request) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+
+        boolean emailChanged = !user.getEmail().equalsIgnoreCase(request.getEmail());
+        if (emailChanged && userRepository.existsByEmail(request.getEmail())) {
+            throw new DuplicateResourceException("Email already exists: " + request.getEmail());
+        }
 
         user.setName(request.getName());
         user.setEmail(request.getEmail());
@@ -74,8 +79,12 @@ public class UserService {
         return mapToResponse(saved);
     }
 
-    @CacheEvict(value = { "userById", "usersList" }, allEntries = true)
+    @CacheEvict(value = { "userById", "usersPage" }, allEntries = true)
     public void deleteUser(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new ResourceNotFoundException("User not found with id: " + id);
+        }
+
         userRepository.deleteById(id);
     }
 

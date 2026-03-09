@@ -46,14 +46,20 @@ class UserControllerWebMvcTest {
     @Test
     void shouldReturnUnauthorizedForAnonymousUsers() throws Exception {
         mockMvc.perform(get("/users"))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.error").value("Unauthorized"))
+                .andExpect(jsonPath("$.message").value("Authentication is required to access this resource"))
+                .andExpect(jsonPath("$.path").value("/users"));
     }
 
     @Test
     @WithMockUser(roles = "USER")
     void shouldReturnForbiddenForNonAdminUsers() throws Exception {
         mockMvc.perform(get("/users"))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.error").value("Forbidden"))
+                .andExpect(jsonPath("$.message").value("Access denied"))
+                .andExpect(jsonPath("$.path").value("/users"));
     }
 
     @Test
@@ -172,5 +178,15 @@ class UserControllerWebMvcTest {
         mockMvc.perform(get("/users/search").param("name", "bob"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content[0].name").value("Bob"));
+    }
+
+    @Test
+    void shouldReturnUnauthorizedForInvalidJwt() throws Exception {
+        when(jwtUtil.parseClaims("invalid-token")).thenThrow(new IllegalArgumentException("bad token"));
+
+        mockMvc.perform(get("/users").header("Authorization", "Bearer invalid-token"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.message").value("Invalid or expired JWT token"))
+                .andExpect(jsonPath("$.path").value("/users"));
     }
 }

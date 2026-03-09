@@ -14,7 +14,7 @@ This repository is a step-by-step Spring Boot backend learning project. It start
 - logging and actuator endpoints
 - Swagger / OpenAPI
 - Flyway database migrations
-- unit tests, repository slice tests, controller slice tests, and integration tests
+- unit tests, repository slice tests, controller slice tests, integration tests, and JaCoCo coverage reporting
 
 ## API Summary
 
@@ -63,6 +63,7 @@ src/main/java/com/isanjalee/demo/springbootdemo
 
 - `application.properties`: shared defaults
 - `application-dev.properties`: local development
+- `application-prod.properties`: production-style PostgreSQL setup
 - `application-docker.properties`: Docker / PostgreSQL setup
 
 The default active profile is `dev`.
@@ -128,6 +129,12 @@ Run the full suite:
 mvn test
 ```
 
+Run tests and generate coverage report:
+
+```bash
+mvn verify
+```
+
 Run one class:
 
 ```bash
@@ -140,6 +147,13 @@ mvn -Dtest=UserServiceTest test
 - `@DataJpaTest` for repository behavior
 - `@WebMvcTest` for controller slices
 - `@SpringBootTest` integration tests for full request flow
+- security-focused tests for unauthorized, forbidden, and invalid-token scenarios
+
+JaCoCo HTML report:
+
+```text
+target/site/jacoco/index.html
+```
 
 ## Learning Progress Covered
 

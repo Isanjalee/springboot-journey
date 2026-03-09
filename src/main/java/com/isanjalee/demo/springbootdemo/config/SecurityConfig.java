@@ -1,13 +1,17 @@
 package com.isanjalee.demo.springbootdemo.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.isanjalee.demo.springbootdemo.security.JwtAuthFilter;
+import com.isanjalee.demo.springbootdemo.security.RestAccessDeniedHandler;
+import com.isanjalee.demo.springbootdemo.security.RestAuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -15,7 +19,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter) throws Exception {
+    public SecurityFilterChain filterChain(
+            HttpSecurity http,
+            JwtAuthFilter jwtAuthFilter,
+            AuthenticationEntryPoint authenticationEntryPoint,
+            AccessDeniedHandler accessDeniedHandler) throws Exception {
 
         http.csrf(csrf -> csrf.disable());
 
@@ -31,10 +39,23 @@ public class SecurityConfig {
                 .permitAll()
                 .anyRequest().authenticated());
 
+        http.exceptionHandling(ex -> ex
+                .authenticationEntryPoint(authenticationEntryPoint)
+                .accessDeniedHandler(accessDeniedHandler));
+
         http.headers(headers -> headers.frameOptions(frame -> frame.disable()));
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
-        http.httpBasic(Customizer.withDefaults());
         return http.build();
+    }
+
+    @Bean
+    public AuthenticationEntryPoint authenticationEntryPoint(ObjectMapper objectMapper) {
+        return new RestAuthenticationEntryPoint(objectMapper);
+    }
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler(ObjectMapper objectMapper) {
+        return new RestAccessDeniedHandler(objectMapper);
     }
 }

@@ -153,10 +153,44 @@ class UserServiceTest {
     }
 
     @Test
-    void deleteUserShouldDelegateToRepository() {
+    void updateUserShouldRejectDuplicateEmailWhenChanged() {
+        User existingUser = user(1L, "Old Name", "old@example.com", "encoded", "USER");
+        when(userRepository.findById(1L)).thenReturn(Optional.of(existingUser));
+        when(userRepository.existsByEmail("taken@example.com")).thenReturn(true);
+
+        UserUpdateRequest request = new UserUpdateRequest();
+        request.setName("New Name");
+        request.setEmail("taken@example.com");
+
+        DuplicateResourceException exception = assertThrows(
+                DuplicateResourceException.class,
+                () -> userService.updateUser(1L, request)
+        );
+
+        assertEquals("Email already exists: taken@example.com", exception.getMessage());
+        verify(userRepository, never()).save(any(User.class));
+    }
+
+    @Test
+    void deleteUserShouldDelegateToRepositoryWhenUserExists() {
+        when(userRepository.existsById(5L)).thenReturn(true);
+
         userService.deleteUser(5L);
 
         verify(userRepository).deleteById(5L);
+    }
+
+    @Test
+    void deleteUserShouldThrowExceptionWhenUserDoesNotExist() {
+        when(userRepository.existsById(5L)).thenReturn(false);
+
+        ResourceNotFoundException exception = assertThrows(
+                ResourceNotFoundException.class,
+                () -> userService.deleteUser(5L)
+        );
+
+        assertEquals("User not found with id: 5", exception.getMessage());
+        verify(userRepository, never()).deleteById(any(Long.class));
     }
 
     @Test

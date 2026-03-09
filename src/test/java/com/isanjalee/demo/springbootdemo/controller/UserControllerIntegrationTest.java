@@ -42,14 +42,20 @@ class UserControllerIntegrationTest {
     @Test
     void shouldRejectAnonymousAccessToUsers() throws Exception {
         mockMvc.perform(get("/users"))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.error").value("Unauthorized"))
+                .andExpect(jsonPath("$.message").value("Authentication is required to access this resource"))
+                .andExpect(jsonPath("$.path").value("/users"));
     }
 
     @Test
     @WithMockUser(roles = "USER")
     void shouldRejectNonAdminAccessToUsers() throws Exception {
         mockMvc.perform(get("/users"))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.error").value("Forbidden"))
+                .andExpect(jsonPath("$.message").value("Access denied"))
+                .andExpect(jsonPath("$.path").value("/users"));
     }
 
     @Test
@@ -165,11 +171,39 @@ class UserControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
+    void shouldRejectUpdateWhenEmailAlreadyExists() throws Exception {
+        User firstUser = saveUser("Carol", "carol@example.com", "USER");
+        saveUser("Dana", "dana@example.com", "USER");
+
+        String body = """
+                {
+                  "name": "Carol Updated",
+                  "email": "dana@example.com"
+                }
+                """;
+
+        mockMvc.perform(put("/users/{id}", firstUser.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.message").value(containsString("Email already exists")));
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldDeleteUser() throws Exception {
         User user = saveUser("Delete Me", "delete@example.com", "USER");
 
         mockMvc.perform(delete("/users/{id}", user.getId()))
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void shouldReturnNotFoundWhenDeletingMissingUser() throws Exception {
+        mockMvc.perform(delete("/users/{id}", 9999L))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value(containsString("User not found with id: 9999")));
     }
 
     @Test
@@ -194,6 +228,15 @@ class UserControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(1))
                 .andExpect(jsonPath("$.content[0].name").value("Evan"));
+    }
+
+    @Test
+    void shouldRejectInvalidJwtToken() throws Exception {
+        mockMvc.perform(get("/users").header("Authorization", "Bearer invalid-token"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.error").value("Unauthorized"))
+                .andExpect(jsonPath("$.message").value("Invalid or expired JWT token"))
+                .andExpect(jsonPath("$.path").value("/users"));
     }
 
     private User saveUser(String name, String email, String role) {

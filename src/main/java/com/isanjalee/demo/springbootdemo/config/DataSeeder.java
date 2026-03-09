@@ -3,10 +3,12 @@ package com.isanjalee.demo.springbootdemo.config;
 import com.isanjalee.demo.springbootdemo.model.User;
 import com.isanjalee.demo.springbootdemo.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
+@Profile("dev")
 public class DataSeeder implements CommandLineRunner {
 
     private final UserRepository userRepository;

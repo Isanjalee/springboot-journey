@@ -17,6 +17,8 @@ import java.util.List;
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 
+    public static final String AUTH_ERROR_ATTRIBUTE = "auth_error";
+
     private final JwtUtil jwtUtil;
 
     public JwtAuthFilter(JwtUtil jwtUtil) {
@@ -43,6 +45,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(auth);
             } catch (Exception e) {
                 SecurityContextHolder.clearContext();
+                request.setAttribute(AUTH_ERROR_ATTRIBUTE, "Invalid or expired JWT token");
             }
         }
 

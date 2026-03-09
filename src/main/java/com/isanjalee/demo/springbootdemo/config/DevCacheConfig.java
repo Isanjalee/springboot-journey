@@ -13,6 +13,6 @@ public class DevCacheConfig {
     @Bean
     public CacheManager cacheManager() {
         // In-memory cache (no Redis needed)
-        return new ConcurrentMapCacheManager("userById", "usersList", "usersPage");
+        return new ConcurrentMapCacheManager("userById", "usersPage");
     }
 }
