@@ -1,5 +1,9 @@
 # Spring Boot Learning Journey
 
+## End of Learning Spring Boot Phase 01
+
+This repository now marks the end of Spring Boot Phase 01. The scope intentionally stops at secure, validated, documented, and tested user-management APIs so the project stays focused on core backend learning instead of growing into an endless feature loop.
+
 This repository is a step-by-step Spring Boot backend learning project. It starts with simple REST APIs and grows into a more production-minded application with validation, security, persistence, migrations, and multiple testing layers.
 
 ## Current Features
@@ -172,8 +176,25 @@ target/site/jacoco/index.html
 - database migrations
 - unit and integration testing
 
+## Phase 01 Exit Criteria Covered
+
+- REST API fundamentals
+- layered architecture
+- DTO-based API design
+- validation and error handling
+- JPA persistence
+- Flyway migrations
+- JWT authentication
+- RBAC authorization
+- pagination and search
+- logging and Swagger
+- profile-based configuration
+- unit, slice, integration, and security tests
+- JaCoCo coverage reporting
+
 ## Notes
 
 - This is a learning repository, not a final enterprise system.
 - The goal is clean progression from beginner to strong backend fundamentals.
-- The next recommended step after this repo is a larger second project with entity relationships, transactions, Flyway-first design, and Testcontainers.
+- This repo is intentionally closed at Phase 01 so the learning scope stays clear and reviewable.
+- If there is a later Phase 02, it should be a separate extension focused on relationships, transactions, and stronger database testing.

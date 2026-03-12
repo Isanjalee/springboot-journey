@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring Boot Codebase Guide</title>
+    <style>
+        :root {
+            --bg: #f5f1e7;
+            --paper: #fffdf8;
+            --ink: #1f2328;
+            --muted: #5f6b76;
+            --line: #d6cebf;
+            --soft: #f3ebdc;
+            --accent: #9a3412;
+            --accent-soft: #fff1ea;
+            --tip-bg: #eef6ff;
+            --tip-line: #bfd6f5;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: Georgia, "Times New Roman", serif;
+            background: linear-gradient(180deg, #efe6d7 0%, #f8f4ec 100%);
+            color: var(--ink);
+            line-height: 1.52;
+        }
+        .page {
+            width: 980px;
+            margin: 24px auto;
+            background: var(--paper);
+            border: 1px solid var(--line);
+            box-shadow: 0 14px 40px rgba(47, 37, 23, 0.12);
+            padding: 42px 54px;
+        }
+        h1, h2, h3 { margin: 0 0 12px; line-height: 1.15; }
+        h1 { font-size: 34px; }
+        h2 {
+            margin-top: 28px;
+            padding-top: 12px;
+            border-top: 2px solid var(--soft);
+            font-size: 22px;
+        }
+        h3 { margin-top: 18px; font-size: 17px; }
+        p { margin: 0 0 10px; }
+        ul, ol { margin: 8px 0 12px 20px; padding: 0; }
+        li { margin: 0 0 6px; }
+        code {
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 0.95em;
+        }
+        pre {
+            margin: 12px 0 16px;
+            padding: 14px 16px;
+            background: #fbf7ef;
+            border: 1px solid var(--line);
+            overflow-x: auto;
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 13px;
+            line-height: 1.45;
+        }
+        .hero {
+            padding: 20px 22px;
+            background: linear-gradient(135deg, #f7ede1 0%, #fff8f0 100%);
+            border: 1px solid var(--line);
+        }
+        .subtle { color: var(--muted); }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 16px 0;
+        }
+        .card {
+            border: 1px solid var(--line);
+            background: #fff9f1;
+            padding: 14px 16px;
+        }
+        .flow {
+            margin: 14px 0 18px;
+            padding: 14px 16px;
+            border-left: 4px solid var(--accent);
+            background: var(--accent-soft);
+            border-top: 1px solid #f0c7b5;
+            border-right: 1px solid #f0c7b5;
+            border-bottom: 1px solid #f0c7b5;
+        }
+        .qa {
+            margin: 14px 0 18px;
+            padding: 14px 16px;
+            border-left: 4px solid var(--accent);
+            background: #fbf8f2;
+            border-top: 1px solid var(--soft);
+            border-right: 1px solid var(--soft);
+            border-bottom: 1px solid var(--soft);
+        }
+        .q {
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .a {
+            margin-bottom: 8px;
+        }
+        .tip {
+            background: var(--tip-bg);
+            border: 1px solid var(--tip-line);
+            padding: 12px 14px;
+            margin: 12px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 18px;
+            font-size: 14px;
+        }
+        th, td {
+            border: 1px solid var(--line);
+            padding: 10px 12px;
+            vertical-align: top;
+            text-align: left;
+        }
+        th { background: #f7efe1; }
+        .footer-note {
+            margin-top: 28px;
+            padding-top: 12px;
+            border-top: 1px solid var(--line);
+            font-size: 13px;
+            color: var(--muted);
+        }
+        @media print {
+            body { background: #fff; }
+            .page {
+                width: auto;
+                margin: 0;
+                box-shadow: none;
+                border: none;
+                padding: 18mm 14mm;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="hero">
+            <h1>Spring Boot Codebase Guide</h1>
+            <p class="subtle">Purpose: internal codebase explanation for studying this repository as a real Spring Boot backend.</p>
+            <p class="subtle">Focus: folder structure, file responsibilities, runtime flow, security flow, configuration, persistence, and test layers.</p>
+            <p class="subtle">This guide reflects the final scope of Spring Boot Learning Phase 01 and intentionally stays focused on the user-management backend.</p>
+        </div>
+
+        <h2>1. Project Purpose</h2>
+        <p>This repository is a learning-to-production-style Spring Boot backend. It starts with simple REST endpoints and grows into a more complete API with DTOs, validation, exception handling, JWT security, role-based authorization, pagination, search, logging, Swagger, profiles, Flyway, and multiple testing layers.</p>
+
+        <div class="grid">
+            <div class="card">
+                <h3>Main business area</h3>
+                <p>User management with authentication.</p>
+                <ul>
+                    <li><code>POST /auth/login</code></li>
+                    <li><code>GET /</code> and <code>GET /hello</code></li>
+                    <li><code>POST /users</code></li>
+                    <li><code>GET /users</code></li>
+                    <li><code>GET /users/{id}</code></li>
+                    <li><code>PUT /users/{id}</code></li>
+                    <li><code>DELETE /users/{id}</code></li>
+                    <li><code>GET /users/search</code></li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>Main technical themes</h3>
+                <ul>
+                    <li>Layered architecture</li>
+                    <li>DTO-driven API design</li>
+                    <li>Validation and global exception handling</li>
+                    <li>JWT + RBAC security</li>
+                    <li>JPA + Flyway persistence</li>
+                    <li>Profiles and environment separation</li>
+                    <li>Unit, slice, integration, and security tests</li>
+                </ul>
+            </div>
+        </div>
+
+        <h2>2. Folder Structure</h2>
+        <pre>springboot-journey
+|- docs
+|  |- java-springboot-interview-pack.html
+|  |- java-springboot-interview-pack.pdf
+|  `- springboot-codebase-guide.html / pdf
+|- src
+|  |- main
+|  |  |- java/com/isanjalee/demo/springbootdemo
+|  |  |  |- config
+|  |  |  |- controller
+|  |  |  |- dto
+|  |  |  |- exception
+|  |  |  |- model
+|  |  |  |- repository
+|  |  |  |- security
+|  |  |  |- service
+|  |  |  `- SpringbootdemoApplication.java
+|  |  `- resources
+|  |     |- application.properties
+|  |     |- application-dev.properties
+|  |     |- application-prod.properties
+|  |     |- application-docker.properties
+|  |     `- db/migration/V1__create_users_table.sql
+|  `- test/java/com/isanjalee/demo/springbootdemo
+|     |- controller
+|     |- repository
+|     |- service
+|     |- HelloWorldTest.java
+|     `- SpringbootdemoApplicationTests.java
+|- pom.xml
+|- Dockerfile
+|- docker-compose.yml
+`- README.md</pre>
+
+        <div class="tip">
+            <strong>How to read this codebase:</strong> start with <code>SpringbootdemoApplication</code>, then read configuration, then controllers, services, repository, entity, resources, and finally tests.
+        </div>
+
+        <h2>3. High-Level Architecture</h2>
+        <div class="flow">
+            Client Request -> Spring Security Filter Chain -> <code>JwtAuthFilter</code> -> Controller -> DTO validation -> Service -> Repository -> Database -> Service maps entity to DTO -> Controller returns HTTP response
+        </div>
+
+        <p>There are three important side paths in this flow:</p>
+        <ul>
+            <li>If validation fails, Spring throws a validation exception before service logic runs.</li>
+            <li>If business rules fail, custom exceptions are thrown in the service layer.</li>
+            <li>If security fails, Spring Security returns 401 or 403 through configured handlers.</li>
+        </ul>
+
+        <h2>4. Entry Point and Bootstrapping</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>File</th>
+                    <th>Role</th>
+                    <th>Important details</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>SpringbootdemoApplication.java</code></td>
+                    <td>Main entry point</td>
+                    <td>Starts Spring Boot, enables configuration property scanning, and enables Spring caching.</td>
+                </tr>
+                <tr>
+                    <td><code>pom.xml</code></td>
+                    <td>Build and dependency definition</td>
+                    <td>Declares Spring Boot starters, JPA, Security, Validation, Flyway, H2, PostgreSQL, SpringDoc, test dependencies, and JaCoCo coverage reporting.</td>
+                </tr>
+                <tr>
+                    <td><code>README.md</code></td>
+                    <td>Project overview</td>
+                    <td>Summarizes features, profiles, endpoints, and test commands.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>5. Main Java Packages and Files</h2>
+        <h3>5.1 config</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>File</th>
+                    <th>What it does</th>
+                    <th>How it is used</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>AppConfig.java</code></td>
+                    <td>Declares a <code>PasswordEncoder</code> bean.</td>
+                    <td><code>AuthService</code> uses it to verify passwords, and <code>UserService</code> uses it to hash new passwords.</td>
+                </tr>
+                <tr>
+                    <td><code>SecurityConfig.java</code></td>
+                    <td>Defines the security filter chain.</td>
+                    <td>Disables CSRF, makes the API stateless, permits auth/docs/H2 routes, protects everything else, wires custom 401/403 handlers, and inserts <code>JwtAuthFilter</code> before the username-password filter.</td>
+                </tr>
+                <tr>
+                    <td><code>JwtProperties.java</code></td>
+                    <td>Maps <code>app.jwt.*</code> properties.</td>
+                    <td><code>JwtUtil</code> uses it to read the signing secret and expiry time.</td>
+                </tr>
+                <tr>
+                    <td><code>DevCacheConfig.java</code></td>
+                    <td>Creates an in-memory cache manager for the <code>dev</code> profile.</td>
+                    <td><code>UserService</code> cache annotations use the <code>userById</code> and <code>usersPage</code> caches during development.</td>
+                </tr>
+                <tr>
+                    <td><code>DataSeeder.java</code></td>
+                    <td>Seeds a default admin user in the <code>dev</code> profile.</td>
+                    <td>Runs at startup via <code>CommandLineRunner</code> and inserts <code>admin@gmail.com / admin123</code> if not present.</td>
+                </tr>
+                <tr>
+                    <td><code>RedisCacheConfig.java</code></td>
+                    <td>Placeholder for Redis-based production caching.</td>
+                    <td>Currently commented out, so it documents a future direction rather than running in the active application.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>5.2 controller</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>File</th>
+                    <th>Endpoints</th>
+                    <th>Role in the flow</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>HelloController.java</code></td>
+                    <td><code>GET /</code>, <code>GET /hello</code></td>
+                    <td>Simple protected endpoints used to prove the app and security are working.</td>
+                </tr>
+                <tr>
+                    <td><code>AuthController.java</code></td>
+                    <td><code>POST /auth/login</code></td>
+                    <td>Accepts validated login input and delegates authentication to <code>AuthService</code>.</td>
+                </tr>
+                <tr>
+                    <td><code>UserController.java</code></td>
+                    <td><code>/users</code> CRUD + search</td>
+                    <td>Thin HTTP layer that accepts DTOs, uses <code>@PreAuthorize</code> for admin-only access, passes work to <code>UserService</code>, and returns proper responses.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>5.3 dto, exception, model, repository, security, service</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Area</th>
+                    <th>Files</th>
+                    <th>Main responsibility</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>DTOs</td>
+                    <td><code>LoginRequest</code>, <code>LoginResponse</code>, <code>UserCreateRequest</code>, <code>UserUpdateRequest</code>, <code>UserResponse</code>, <code>ErrorResponse</code></td>
+                    <td>Define request, response, and error payload shapes. Validation annotations live here for input DTOs.</td>
+                </tr>
+                <tr>
+                    <td>Exceptions</td>
+                    <td><code>BadRequestException</code>, <code>DuplicateResourceException</code>, <code>ResourceNotFoundException</code>, <code>GlobalExceptionHandler</code></td>
+                    <td>Represent domain errors and convert them into consistent HTTP responses.</td>
+                </tr>
+                <tr>
+                    <td>Model</td>
+                    <td><code>User.java</code></td>
+                    <td>JPA entity mapped to the <code>users</code> table.</td>
+                </tr>
+                <tr>
+                    <td>Repository</td>
+                    <td><code>UserRepository.java</code></td>
+                    <td>Data access through JPA, plus email lookup and search helpers.</td>
+                </tr>
+                <tr>
+                    <td>Security</td>
+                    <td><code>JwtUtil</code>, <code>JwtAuthFilter</code>, <code>RestAuthenticationEntryPoint</code>, <code>RestAccessDeniedHandler</code></td>
+                    <td>Generate tokens, validate them on requests, and standardize 401/403 responses.</td>
+                </tr>
+                <tr>
+                    <td>Services</td>
+                    <td><code>AuthService</code>, <code>UserService</code></td>
+                    <td>Contain login logic, user business rules, password hashing, duplicate checks, DTO mapping, cache usage, and search logic.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>6. Resources and Environment Files</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>File</th>
+                    <th>Purpose</th>
+                    <th>What matters most</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>application.properties</code></td>
+                    <td>Shared default configuration.</td>
+                    <td>Defines base datasource, JWT values, Flyway, logging, actuator, and default active profile <code>dev</code>.</td>
+                </tr>
+                <tr>
+                    <td><code>application-dev.properties</code></td>
+                    <td>Development profile settings.</td>
+                    <td>Uses H2 and simple local cache with debug-friendly logging.</td>
+                </tr>
+                <tr>
+                    <td><code>application-prod.properties</code></td>
+                    <td>Production-style configuration.</td>
+                    <td>Uses PostgreSQL-style environment variables, disables H2 console, and uses safer runtime defaults.</td>
+                </tr>
+                <tr>
+                    <td><code>application-docker.properties</code></td>
+                    <td>Docker profile configuration.</td>
+                    <td>Points to Docker-hosted PostgreSQL and Redis service names.</td>
+                </tr>
+                <tr>
+                    <td><code>db/migration/V1__create_users_table.sql</code></td>
+                    <td>Flyway schema migration.</td>
+                    <td>Creates the <code>users</code> table and enforces unique email.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>7. End-to-End Request Flows</h2>
+        <h3>7.1 Application Startup Flow</h3>
+        <ol>
+            <li>Spring Boot starts from <code>SpringbootdemoApplication</code>.</li>
+            <li>Configuration properties are loaded from <code>application*.properties</code>.</li>
+            <li>Spring creates beans from configuration classes.</li>
+            <li>Flyway validates and applies migrations.</li>
+            <li>JPA/Hibernate initializes entity mapping.</li>
+            <li>Security filter chain is built from <code>SecurityConfig</code>.</li>
+            <li>If profile is <code>dev</code>, cache manager and seeded admin user are created.</li>
+        </ol>
+
+        <h3>7.2 Login Flow</h3>
+        <div class="flow">
+            <code>POST /auth/login</code> -> <code>AuthController</code> -> validate <code>LoginRequest</code> -> <code>AuthService.login()</code> -> <code>UserRepository.findByEmail()</code> -> password check -> <code>JwtUtil.generateToken()</code> -> <code>LoginResponse</code>
+        </div>
+
+        <h3>7.3 Secured User CRUD Flow</h3>
+        <div class="flow">
+            Client sends bearer token -> <code>JwtAuthFilter</code> parses token -> Spring Security stores authentication -> <code>@PreAuthorize("hasRole('ADMIN')")</code> checks role -> controller method runs -> service performs business logic -> repository accesses DB -> service maps entity to DTO -> controller returns response
+        </div>
+
+        <h3>7.4 Validation and Error Flow</h3>
+        <ul>
+            <li>Validation annotations are declared in DTO classes.</li>
+            <li><code>@Valid</code> triggers validation in controllers.</li>
+            <li><code>MethodArgumentNotValidException</code> is handled by <code>GlobalExceptionHandler</code>.</li>
+            <li>Business exceptions like duplicate email and not found are also handled centrally.</li>
+            <li>Security failures are split into 401 via the authentication entry point and 403 via access-denied handling.</li>
+        </ul>
+
+        <h3>7.5 Search, Pagination, and Cache Flow</h3>
+        <p><code>UserController.searchUsers()</code> accepts optional <code>name</code> or <code>email</code> query parameters and a <code>Pageable</code>. The service chooses the correct repository query and maps the result to <code>UserResponse</code>. <code>getUserById()</code> and <code>getAllUsers()</code> use cache annotations, while create, update, and delete evict those cache entries.</p>
+
+        <h2>8. Testing Structure</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Test file</th>
+                    <th>Type</th>
+                    <th>What it proves</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>HelloWorldTest.java</code></td>
+                    <td>Basic unit placeholder</td>
+                    <td>Very small sanity test showing the test pipeline is working.</td>
+                </tr>
+                <tr>
+                    <td><code>SpringbootdemoApplicationTests.java</code></td>
+                    <td>Context load test</td>
+                    <td>Verifies that the Spring application context starts successfully.</td>
+                </tr>
+                <tr>
+                    <td><code>UserRepositoryTest.java</code></td>
+                    <td><code>@DataJpaTest</code></td>
+                    <td>Validates custom repository behavior such as search queries and email lookup.</td>
+                </tr>
+                <tr>
+                    <td><code>UserServiceTest.java</code></td>
+                    <td>Unit test with Mockito</td>
+                    <td>Validates service rules like duplicate checks, mapping, missing-user handling, update behavior, and delete behavior.</td>
+                </tr>
+                <tr>
+                    <td><code>AuthControllerWebMvcTest.java</code></td>
+                    <td><code>@WebMvcTest</code></td>
+                    <td>Tests login-controller behavior with mocked service dependencies.</td>
+                </tr>
+                <tr>
+                    <td><code>UserControllerWebMvcTest.java</code></td>
+                    <td><code>@WebMvcTest</code></td>
+                    <td>Tests admin security restrictions, validation, response shape, and invalid JWT handling for user endpoints.</td>
+                </tr>
+                <tr>
+                    <td><code>AuthControllerIntegrationTest.java</code></td>
+                    <td><code>@SpringBootTest</code> + MockMvc</td>
+                    <td>Tests the full login flow with real Spring beans, repository, and password encoding.</td>
+                </tr>
+                <tr>
+                    <td><code>HelloControllerIntegrationTest.java</code></td>
+                    <td><code>@SpringBootTest</code> + MockMvc</td>
+                    <td>Tests security around the sample endpoints.</td>
+                </tr>
+                <tr>
+                    <td><code>UserControllerIntegrationTest.java</code></td>
+                    <td><code>@SpringBootTest</code> + MockMvc</td>
+                    <td>Tests real end-to-end behavior for CRUD, search, validation, authorization, invalid token handling, and not-found scenarios.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="tip">
+            <strong>Reading tests gives fast understanding:</strong> if you want to learn what the code is supposed to do, the integration tests are one of the best entry points because they show expected behavior from the outside.
+        </div>
+
+        <h2>9. How the Main Files Work Together</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Concern</th>
+                    <th>Files involved</th>
+                    <th>Combined behavior</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Login</td>
+                    <td><code>AuthController</code>, <code>LoginRequest</code>, <code>AuthService</code>, <code>UserRepository</code>, <code>PasswordEncoder</code>, <code>JwtUtil</code>, <code>LoginResponse</code></td>
+                    <td>Validates credentials and issues a signed JWT token.</td>
+                </tr>
+                <tr>
+                    <td>Authorization</td>
+                    <td><code>SecurityConfig</code>, <code>JwtAuthFilter</code>, <code>RestAuthenticationEntryPoint</code>, <code>RestAccessDeniedHandler</code>, <code>@PreAuthorize</code></td>
+                    <td>Protects endpoints and converts security failures into JSON responses.</td>
+                </tr>
+                <tr>
+                    <td>User creation</td>
+                    <td><code>UserController.create()</code>, <code>UserCreateRequest</code>, <code>UserService.createUser()</code>, <code>UserRepository</code>, <code>User</code>, <code>UserResponse</code></td>
+                    <td>Validates input, checks uniqueness, hashes password, saves the entity, and returns safe response data.</td>
+                </tr>
+                <tr>
+                    <td>Error handling</td>
+                    <td><code>GlobalExceptionHandler</code>, <code>ErrorResponse</code>, custom exception classes</td>
+                    <td>Standardizes validation, business, security, and fallback errors across the API.</td>
+                </tr>
+                <tr>
+                    <td>Environment behavior</td>
+                    <td><code>application*.properties</code>, <code>JwtProperties</code>, <code>DataSeeder</code>, <code>DevCacheConfig</code></td>
+                    <td>Changes runtime behavior by profile without changing business code.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>10. Recommended Learning Path Through This Repo</h2>
+        <ol>
+            <li>Read <code>README.md</code> to understand what the project claims to do.</li>
+            <li>Open <code>pom.xml</code> and identify the core dependencies.</li>
+            <li>Read <code>SpringbootdemoApplication.java</code> and config classes.</li>
+            <li>Read <code>SecurityConfig</code>, <code>JwtAuthFilter</code>, and <code>JwtUtil</code> together.</li>
+            <li>Read controllers to see available endpoints.</li>
+            <li>Read DTOs to understand request and response shapes.</li>
+            <li>Read services to understand business rules.</li>
+            <li>Read <code>UserRepository</code> and <code>User</code> for persistence structure.</li>
+            <li>Read resources and Flyway migration for environment and schema.</li>
+            <li>Read tests last to confirm expected behavior and edge cases.</li>
+        </ol>
+
+        <h2>11. Final Internal Summary</h2>
+        <div class="flow">
+            This is a layered Spring Boot backend where controllers manage HTTP, services contain business rules, repositories handle persistence, DTOs define the API contract, security is enforced through JWT and role checks, exceptions are standardized globally, environment behavior is controlled by profiles, and the whole stack is validated through repository, service, WebMvc, integration, and security-focused tests.
+        </div>
+
+        <h2>12. End of Learning Spring Boot Phase 01</h2>
+        <div class="flow">
+            This repository is complete for Phase 01 because it already covers the core Spring Boot backend learning path: application bootstrapping, REST APIs, layered architecture, DTOs, validation, exception handling, JPA, Flyway, JWT, RBAC, pagination, logging, Swagger, profiles, and several test layers. The project intentionally stops here to keep the codebase compact and reviewable.
+        </div>
+
+        <h2>13. Codebase Interview Questions With Answers</h2>
+        <div class="qa">
+            <div class="q">Q: Why is the service layer important in this codebase?</div>
+            <div class="a">A: The service layer keeps business rules out of controllers. Controllers only handle HTTP concerns, while services manage decisions such as duplicate-email checks, password hashing, caching behavior, and not-found handling. This separation makes the code easier to test and maintain.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: How does authentication work from request to response?</div>
+            <div class="a">A: The client sends email and password to <code>POST /auth/login</code>. The controller passes the request to <code>AuthService</code>, which loads the user from the repository, verifies the password with <code>PasswordEncoder</code>, and generates a JWT through <code>JwtUtil</code>. That token is then returned in the login response and used on later requests.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: Where is validation enforced and how are errors returned?</div>
+            <div class="a">A: Validation rules are declared in request DTOs, and controller methods trigger them with <code>@Valid</code>. If input is invalid, Spring raises a validation exception before service logic runs. <code>GlobalExceptionHandler</code> then converts that into a structured JSON response with the correct HTTP status.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: Why use DTOs instead of returning entities directly?</div>
+            <div class="a">A: DTOs protect the API contract from internal entity changes, prevent accidental exposure of sensitive fields like passwords, and give a clean place for validation. They also make responses clearer because the API returns only what clients actually need.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: What changes between dev and prod behavior in this repo?</div>
+            <div class="a">A: Development uses local-friendly settings such as H2, dev cache config, and seed data for fast testing. Production-style configuration switches to PostgreSQL-oriented settings, disables local-only tooling such as the H2 console, and uses safer defaults. Profiles allow those differences without changing core business code.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: Why are there multiple test layers instead of only integration tests?</div>
+            <div class="a">A: Each test layer answers a different question. Unit tests check service rules quickly, repository tests check JPA behavior, WebMvc tests verify controller and security behavior in isolation, and integration tests verify the full request flow. Together they give faster feedback and better confidence than using only one style of test.</div>
+        </div>
+
+        <div class="footer-note">
+            Prepared as an internal codebase study guide and aligned to the completed scope of Spring Boot Learning Phase 01. Best used while reading the project side by side in the IDE.
+        </div>
+    </div>
+</body>
+</html>

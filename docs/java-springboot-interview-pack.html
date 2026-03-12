@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Spring Boot Interview Pack</title>
+    <style>
+        :root {
+            --bg: #f6f1e8;
+            --paper: #fffdf8;
+            --ink: #1f2328;
+            --muted: #5f6b76;
+            --accent: #0b5fff;
+            --line: #d9d1c5;
+            --soft: #efe7d8;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Georgia, "Times New Roman", serif;
+            background: linear-gradient(180deg, #efe6d7 0%, #f8f3eb 100%);
+            color: var(--ink);
+            line-height: 1.48;
+        }
+
+        .page {
+            width: 900px;
+            margin: 24px auto;
+            background: var(--paper);
+            border: 1px solid var(--line);
+            box-shadow: 0 14px 40px rgba(47, 37, 23, 0.12);
+            padding: 44px 56px;
+        }
+
+        h1, h2, h3 {
+            margin: 0 0 12px;
+            line-height: 1.15;
+        }
+
+        h1 {
+            font-size: 34px;
+            letter-spacing: 0.2px;
+        }
+
+        h2 {
+            margin-top: 28px;
+            padding-top: 12px;
+            border-top: 2px solid var(--soft);
+            font-size: 22px;
+        }
+
+        h3 {
+            margin-top: 18px;
+            font-size: 17px;
+        }
+
+        p {
+            margin: 0 0 10px;
+        }
+
+        ul {
+            margin: 8px 0 12px 20px;
+            padding: 0;
+        }
+
+        li {
+            margin: 0 0 6px;
+        }
+
+        .hero {
+            padding: 20px 22px;
+            background: linear-gradient(135deg, #f5ebdc 0%, #fff8ee 100%);
+            border: 1px solid var(--line);
+        }
+
+        .subtle {
+            color: var(--muted);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 16px 0;
+        }
+
+        .card {
+            border: 1px solid var(--line);
+            background: #fffaf1;
+            padding: 14px 16px;
+        }
+
+        .qa {
+            margin: 14px 0 18px;
+            padding: 14px 16px;
+            border-left: 4px solid var(--accent);
+            background: #fbf8f2;
+            border-top: 1px solid var(--soft);
+            border-right: 1px solid var(--soft);
+            border-bottom: 1px solid var(--soft);
+        }
+
+        .q {
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .a {
+            margin-bottom: 8px;
+        }
+
+        .tip {
+            background: #eef4ff;
+            border: 1px solid #c9d9ff;
+            padding: 12px 14px;
+            margin: 12px 0;
+        }
+
+        .tag {
+            display: inline-block;
+            margin: 0 8px 8px 0;
+            padding: 4px 8px;
+            border: 1px solid var(--line);
+            background: #fff7ea;
+            font-size: 12px;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 18px;
+            font-size: 14px;
+        }
+
+        th, td {
+            border: 1px solid var(--line);
+            padding: 10px 12px;
+            vertical-align: top;
+            text-align: left;
+        }
+
+        th {
+            background: #f7efe1;
+        }
+
+        .footer-note {
+            margin-top: 28px;
+            padding-top: 12px;
+            border-top: 1px solid var(--line);
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        @media print {
+            body {
+                background: #fff;
+            }
+
+            .page {
+                width: auto;
+                margin: 0;
+                box-shadow: none;
+                border: none;
+                padding: 18mm 14mm;
+            }
+
+            a {
+                color: inherit;
+                text-decoration: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="hero">
+            <h1>Java + Spring Boot Interview Pack</h1>
+            <p class="subtle">Target level: Junior to Mid-level backend engineer, around 1 year of experience.</p>
+            <p class="subtle">Purpose: quick revision pack for interviews, practical explanation of workflow, and internal Spring Boot understanding.</p>
+            <p class="subtle">Aligned to the final scope of Spring Boot Learning Phase 01 and focused on Days 1-17 topics.</p>
+            <div style="margin-top: 12px;">
+                <span class="tag">Java Core</span>
+                <span class="tag">Spring Boot</span>
+                <span class="tag">JPA</span>
+                <span class="tag">Security</span>
+                <span class="tag">Testing</span>
+                <span class="tag">Workflow</span>
+            </div>
+        </div>
+
+        <h2>1. How To Present Yourself</h2>
+        <p><strong>Short intro sample:</strong> I am a Java backend developer with around 1 year of experience working with Spring Boot, REST APIs, JPA, validation, security, and testing. I have built CRUD APIs with layered architecture, JWT-based authentication, role-based access control, pagination, exception handling, logging, Swagger/OpenAPI, profile-based configuration, and multiple test layers including unit, slice, integration, and coverage reporting.</p>
+
+        <div class="grid">
+            <div class="card">
+                <h3>What you should emphasize</h3>
+                <ul>
+                    <li>Layered architecture: controller, service, repository</li>
+                    <li>DTO usage instead of exposing entities directly</li>
+                    <li>Validation and proper HTTP status codes</li>
+                    <li>Security basics: JWT, roles, 401 vs 403</li>
+                    <li>Testing mindset, not only feature building</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>What you should avoid</h3>
+                <ul>
+                    <li>Claiming deep microservices or cloud expertise if you have not used them</li>
+                    <li>Only explaining annotations without explaining request flow</li>
+                    <li>Talking only about happy-path CRUD</li>
+                    <li>Ignoring tradeoffs and error handling</li>
+                </ul>
+            </div>
+        </div>
+
+        <h2>2. Real Request Workflow In Spring Boot</h2>
+        <p><strong>Typical flow:</strong> Client sends HTTP request -> Spring Security filter chain checks authentication -> DispatcherServlet routes request -> controller receives DTO -> validation runs -> service executes business logic -> repository talks to database -> service returns response DTO -> controller sends HTTP response.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Layer</th>
+                    <th>Main responsibility</th>
+                    <th>Interview explanation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Controller</td>
+                    <td>Handle HTTP request/response</td>
+                    <td>Should stay thin. Accept request DTOs, call service, return response entity or DTO.</td>
+                </tr>
+                <tr>
+                    <td>Service</td>
+                    <td>Business logic</td>
+                    <td>Best place for rules, orchestration, transactions, validations beyond field-level constraints.</td>
+                </tr>
+                <tr>
+                    <td>Repository</td>
+                    <td>Data access</td>
+                    <td>Only persistence concerns. No request handling logic here.</td>
+                </tr>
+                <tr>
+                    <td>Database</td>
+                    <td>Store data</td>
+                    <td>JPA/Hibernate maps Java entities to relational tables.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="tip">
+            <strong>Good interview line:</strong> I try to keep controllers thin, put business decisions in services, and keep repositories focused on persistence. That makes code easier to test and maintain.
+        </div>
+
+        <h2>3. Spring Boot Internals You Should Know</h2>
+
+        <div class="qa">
+            <div class="q">Q: What does Spring Boot do for you?</div>
+            <div class="a">A: Spring Boot reduces configuration overhead. It uses auto-configuration, starter dependencies, embedded server support, externalized configuration, and convention over configuration so we can focus on business logic faster.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: What is auto-configuration?</div>
+            <div class="a">A: Auto-configuration means Spring Boot creates beans automatically based on the dependencies and properties available in the classpath. For example, if Spring Web is present, it configures MVC components; if JPA and a datasource are present, it configures JPA infrastructure.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: What is the role of DispatcherServlet?</div>
+            <div class="a">A: DispatcherServlet is the front controller in Spring MVC. It receives incoming HTTP requests, finds the correct controller method through handler mapping, invokes it, and builds the response.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: What is dependency injection?</div>
+            <div class="a">A: Dependency injection means objects receive their dependencies from the Spring container instead of creating them manually. It improves testability and loose coupling. Constructor injection is preferred because dependencies are explicit and immutable.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: What happens when the application starts?</div>
+            <div class="a">A: Spring Boot creates the application context, scans components, registers beans, applies auto-configuration, starts the embedded Tomcat server, and initializes supporting infrastructure like JPA, Flyway, and security filters.</div>
+        </div>
+
+        <h2>4. Java Core Questions With Good Answers</h2>
+
+        <div class="qa">
+            <div class="q">Q: Difference between JDK, JRE, and JVM?</div>
+            <div class="a">A: JVM runs Java bytecode. JRE includes JVM plus runtime libraries. JDK includes JRE plus development tools like javac and javadoc.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: Why is Java platform independent?</div>
+            <div class="a">A: Java source code is compiled into bytecode, and that bytecode runs on any platform that has a JVM.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: Difference between HashMap and ConcurrentHashMap?</div>
+            <div class="a">A: HashMap is not thread-safe. ConcurrentHashMap supports concurrent access and is safer in multithreaded scenarios. HashMap allows one null key, ConcurrentHashMap does not allow null keys or values.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: Why use Optional?</div>
+            <div class="a">A: Optional makes absence of value explicit and helps reduce accidental null handling mistakes. In Spring Data JPA, repository methods like findById often return Optional to represent possible absence of data.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: Difference between checked and unchecked exceptions?</div>
+            <div class="a">A: Checked exceptions must be handled or declared at compile time. Unchecked exceptions extend RuntimeException and usually represent programming or domain errors that are not forced by the compiler.</div>
+        </div>
+
+        <h2>5. JPA and Database Questions</h2>
+
+        <div class="qa">
+            <div class="q">Q: What is JPA and what is Hibernate?</div>
+            <div class="a">A: JPA is a Java specification for ORM. Hibernate is a popular implementation of JPA. We code mostly against JPA APIs and Hibernate executes the ORM behavior underneath.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: What is the difference between save() and saveAndFlush()?</div>
+            <div class="a">A: save() persists changes in the persistence context and the flush may happen later. saveAndFlush() forces synchronization to the database immediately. save() is enough in most cases.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: Why should you avoid ddl-auto=update in serious projects?</div>
+            <div class="a">A: Because schema changes become implicit and hard to track. It is safer to use Flyway or Liquibase so schema evolution is explicit, versioned, and repeatable across environments.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: What is Flyway?</div>
+            <div class="a">A: Flyway is a database migration tool. It runs versioned SQL scripts like V1__create_users_table.sql during startup so the database schema is managed in source control.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: What is the N+1 problem?</div>
+            <div class="a">A: It happens when one query loads a list of parent entities and then additional queries are executed for each child relation. It causes performance issues and is commonly solved with better fetching strategies or join fetch queries.</div>
+        </div>
+
+        <h2>6. Security Questions</h2>
+
+        <div class="qa">
+            <div class="q">Q: What is JWT?</div>
+            <div class="a">A: JWT is a signed token containing claims such as subject and role. The server verifies the token signature and extracts claims instead of storing session state on the server.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: What is the difference between authentication and authorization?</div>
+            <div class="a">A: Authentication answers who the user is. Authorization answers what the user is allowed to do.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: Difference between 401 and 403?</div>
+            <div class="a">A: 401 means the request is not authenticated. 403 means the user is authenticated but does not have permission for that resource.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: Why do we hash passwords?</div>
+            <div class="a">A: Passwords should never be stored in plain text. Hashing with BCrypt protects user credentials if the database is leaked and supports secure password verification.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: What does a JWT filter do?</div>
+            <div class="a">A: It intercepts incoming requests, reads the Authorization header, validates the token, extracts user details or roles, and sets authentication into the SecurityContext so Spring Security can authorize the request.</div>
+        </div>
+
+        <h2>7. Testing Questions</h2>
+
+        <div class="qa">
+            <div class="q">Q: Difference between unit test, slice test, and integration test?</div>
+            <div class="a">A: Unit test isolates one class and mocks dependencies. Slice test loads only a focused framework layer such as MVC or JPA. Integration test loads more of the real application and checks components working together.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: What is @WebMvcTest used for?</div>
+            <div class="a">A: It loads controller-related MVC infrastructure only. It is useful for fast controller testing with mocked services.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: What is @DataJpaTest used for?</div>
+            <div class="a">A: It loads repository and JPA-related components only. It is used to test database queries and entity mapping behavior.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: Why use MockMvc?</div>
+            <div class="a">A: MockMvc lets us test HTTP request and response behavior without deploying the application to a real external server. It is useful for verifying status codes, JSON, validation, and security rules.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: What does code coverage tell you and what are its limits?</div>
+            <div class="a">A: Coverage tells us how much code was executed by tests, for example through a JaCoCo report. It is useful for spotting untested areas, but high coverage alone does not prove good assertions or real business-case testing.</div>
+        </div>
+
+        <h2>8. Common Project-Based Questions</h2>
+
+        <div class="qa">
+            <div class="q">Q: Why did you use DTOs?</div>
+            <div class="a">A: DTOs decouple the API contract from the entity model. They help control exposed fields, support validation, and avoid returning sensitive fields like passwords.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: Why did you add a global exception handler?</div>
+            <div class="a">A: To keep error responses consistent and avoid repeating try/catch logic in controllers. It also helps return proper status codes like 400, 404, 409, 401, and 403.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: Why did you add pagination?</div>
+            <div class="a">A: Returning the full dataset does not scale. Pagination reduces memory use, response size, and DB/network overhead, and gives clients controlled access to large datasets.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: How do you approach adding a new API in Spring Boot?</div>
+            <div class="a">A: First define the API contract and DTOs. Then add controller endpoint, implement business logic in service, add repository logic if needed, define validations and error cases, secure the endpoint, and finally write unit, slice, and integration tests.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: Why did you use profiles like dev and prod?</div>
+            <div class="a">A: Profiles let us keep environment-specific settings separate. For example, dev can use H2 and verbose logging, while prod can use PostgreSQL, safer defaults, and no local-only tools like the H2 console or seeded demo users.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: Why did you add Swagger / OpenAPI?</div>
+            <div class="a">A: Swagger improves API discoverability and speeds up testing and collaboration. It gives a live contract for endpoints, request bodies, and response structures, which is useful both during development and in interviews when explaining the project.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: What do you log in a backend application?</div>
+            <div class="a">A: I log meaningful application events such as login attempts, entity creation, important failures, and request flow checkpoints. I avoid logging secrets, passwords, or raw tokens, and I use logs mainly for debugging and operational visibility.</div>
+        </div>
+
+        <h2>9. Workflow You Should Explain In Interviews</h2>
+
+        <h3>Feature workflow</h3>
+        <ul>
+            <li>Understand business requirement</li>
+            <li>Identify request/response contract</li>
+            <li>Design DTOs and validation rules</li>
+            <li>Implement controller and service logic</li>
+            <li>Use repository for persistence</li>
+            <li>Add exception handling and security rules</li>
+            <li>Write tests and verify with API calls</li>
+        </ul>
+
+        <h3>Bug fix workflow</h3>
+        <ul>
+            <li>Reproduce the issue clearly</li>
+            <li>Check logs and stack trace</li>
+            <li>Narrow it to controller, service, repository, or config</li>
+            <li>Fix root cause, not only symptom</li>
+            <li>Add or update tests to prevent regression</li>
+        </ul>
+
+        <h3>Code review workflow</h3>
+        <ul>
+            <li>Check correctness first</li>
+            <li>Check API contract changes</li>
+            <li>Check security and validation</li>
+            <li>Check DB impact and migration need</li>
+            <li>Check test coverage and edge cases</li>
+        </ul>
+
+        <h2>10. Internal Debugging Mindset</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Problem</th>
+                    <th>How to think</th>
+                    <th>Likely area</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>400 Bad Request</td>
+                    <td>Was validation triggered? Is JSON shape correct?</td>
+                    <td>DTO, validation, request body</td>
+                </tr>
+                <tr>
+                    <td>401 Unauthorized</td>
+                    <td>Was authentication missing or token invalid?</td>
+                    <td>Security config, JWT filter</td>
+                </tr>
+                <tr>
+                    <td>403 Forbidden</td>
+                    <td>Was the user authenticated but missing a role?</td>
+                    <td>Method security, authorities</td>
+                </tr>
+                <tr>
+                    <td>404 Not Found</td>
+                    <td>Does data exist? Is endpoint mapping correct?</td>
+                    <td>Controller path, service lookup</td>
+                </tr>
+                <tr>
+                    <td>500 Internal Server Error</td>
+                    <td>Check stack trace, logs, null handling, configuration</td>
+                    <td>Service logic, DB, config, unexpected exceptions</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>11. Strong Answers About Your Current Repo</h2>
+        <p>If they ask you about a real project, use your current Spring Boot repository.</p>
+
+        <div class="qa">
+            <div class="q">Q: What did you build in your project?</div>
+            <div class="a">A: I built a Spring Boot backend with user management, authentication, JWT security, role-based authorization, validation, exception handling, pagination, search, Flyway migrations, and multiple test layers.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: What improvements did you make over time?</div>
+            <div class="a">A: I started with basic CRUD, then introduced service and repository layers, DTOs, validation, JPA persistence, security, structured error handling, logging, Swagger, Flyway, and full test coverage including unit, repository, controller slice, and integration tests.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: What did you learn from testing?</div>
+            <div class="a">A: I learned to separate testing levels. Unit tests verify service rules, @WebMvcTest verifies controller behavior, @DataJpaTest verifies query behavior, and integration tests verify the whole request flow including security and persistence.</div>
+        </div>
+
+        <h2>12. Day 1-17 Interview Drill</h2>
+        <p>Use this section for focused revision if the interviewer asks you to explain your learning journey step by step.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Day</th>
+                    <th>Main topic</th>
+                    <th>Question they may ask</th>
+                    <th>What your answer should emphasize</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Day 1</td>
+                    <td>Spring Boot setup</td>
+                    <td>How do you start a Spring Boot project and what does <code>@SpringBootApplication</code> give you?</td>
+                    <td>Mention auto-configuration, component scanning, starter dependencies, and embedded server support.</td>
+                </tr>
+                <tr>
+                    <td>Day 2</td>
+                    <td>First REST endpoint</td>
+                    <td>What is the difference between <code>@Controller</code> and <code>@RestController</code>?</td>
+                    <td>Explain JSON responses, HTTP endpoints, and that <code>@RestController</code> is effectively <code>@Controller</code> plus <code>@ResponseBody</code>.</td>
+                </tr>
+                <tr>
+                    <td>Day 3</td>
+                    <td>CRUD basics</td>
+                    <td>How would you build a simple CRUD API in Spring Boot?</td>
+                    <td>Walk through endpoint mapping, request DTO, service call, repository call, and proper status codes.</td>
+                </tr>
+                <tr>
+                    <td>Day 4</td>
+                    <td>Layered architecture</td>
+                    <td>Why should controllers stay thin?</td>
+                    <td>Say business logic belongs in services, not controllers, because it improves reuse, readability, and testing.</td>
+                </tr>
+                <tr>
+                    <td>Day 5</td>
+                    <td>JPA repository</td>
+                    <td>What does <code>JpaRepository</code> give you out of the box?</td>
+                    <td>Mention save, findById, findAll, deleteById, paging support, and custom derived queries.</td>
+                </tr>
+                <tr>
+                    <td>Day 6</td>
+                    <td>DTO design</td>
+                    <td>Why not expose your entity directly in API responses?</td>
+                    <td>Talk about API contract control, hiding sensitive fields like passwords, and separating persistence from API shape.</td>
+                </tr>
+                <tr>
+                    <td>Day 7</td>
+                    <td>Validation</td>
+                    <td>How does validation work for incoming requests?</td>
+                    <td>Explain Bean Validation annotations, <code>@Valid</code>, and how invalid payloads return 400 with structured errors.</td>
+                </tr>
+                <tr>
+                    <td>Day 8</td>
+                    <td>Exception handling</td>
+                    <td>Why use a global exception handler?</td>
+                    <td>Highlight consistent error JSON, centralized handling, and cleaner controllers with correct status codes.</td>
+                </tr>
+                <tr>
+                    <td>Day 9</td>
+                    <td>Database config</td>
+                    <td>Why use H2 in development and PostgreSQL-style config for production?</td>
+                    <td>Explain fast local setup for learning and realistic production-ready database separation through profiles.</td>
+                </tr>
+                <tr>
+                    <td>Day 10</td>
+                    <td>Flyway migrations</td>
+                    <td>Why are versioned SQL migrations better than relying on automatic schema updates?</td>
+                    <td>Mention traceability, team consistency, repeatability across environments, and safer deployment workflow.</td>
+                </tr>
+                <tr>
+                    <td>Day 11</td>
+                    <td>Password security</td>
+                    <td>How do you store and verify passwords securely?</td>
+                    <td>Say passwords are hashed with BCrypt, never stored in plain text, and checked with a password encoder.</td>
+                </tr>
+                <tr>
+                    <td>Day 12</td>
+                    <td>JWT authentication</td>
+                    <td>What happens after a user logs in?</td>
+                    <td>Explain credential validation, JWT generation, token claims like subject and role, and stateless authentication.</td>
+                </tr>
+                <tr>
+                    <td>Day 13</td>
+                    <td>RBAC</td>
+                    <td>How do you restrict certain APIs to admins only?</td>
+                    <td>Mention authorities, roles, Spring Security context, and method-level checks such as <code>@PreAuthorize</code>.</td>
+                </tr>
+                <tr>
+                    <td>Day 14</td>
+                    <td>Pagination and search</td>
+                    <td>Why use <code>Pageable</code> instead of returning everything?</td>
+                    <td>Talk about scalability, response size, sorting, and better client-side control when datasets grow.</td>
+                </tr>
+                <tr>
+                    <td>Day 15</td>
+                    <td>Logging and Swagger</td>
+                    <td>How do logs and Swagger help during development?</td>
+                    <td>Logs help debugging and operational tracing; Swagger helps discover, test, and explain APIs quickly.</td>
+                </tr>
+                <tr>
+                    <td>Day 16</td>
+                    <td>Profiles and environments</td>
+                    <td>What changes between dev and prod profiles in your project?</td>
+                    <td>Mention datasource settings, logging level, H2 console availability, seed data, and safer production defaults.</td>
+                </tr>
+                <tr>
+                    <td>Day 17</td>
+                    <td>Testing and coverage</td>
+                    <td>What test layers do you have, and how do you measure coverage?</td>
+                    <td>Explain unit, repository, WebMvc, integration, and security-focused tests, plus JaCoCo reports for visibility into untested code paths.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Day 1-17 Detailed Questions and Answers</h3>
+
+        <div class="qa">
+            <div class="q">Q: Day 1 - How do you start a Spring Boot project and what does <code>@SpringBootApplication</code> give you?</div>
+            <div class="a">A: I usually start from Spring Initializr and choose the dependencies I need such as Spring Web, JPA, Validation, Security, and H2 or PostgreSQL. <code>@SpringBootApplication</code> is a convenience annotation that combines configuration, component scanning, and auto-configuration. It helps Spring Boot find beans, configure the application based on classpath dependencies, and start the embedded server quickly.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: Day 2 - What is the difference between <code>@Controller</code> and <code>@RestController</code>?</div>
+            <div class="a">A: <code>@Controller</code> is generally used for MVC applications that return views, while <code>@RestController</code> is used for REST APIs and returns data directly as JSON. In simple terms, <code>@RestController</code> is <code>@Controller</code> plus <code>@ResponseBody</code>. Since my project is a backend API project, <code>@RestController</code> is the correct choice.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: Day 3 - How would you explain a basic CRUD API in Spring Boot?</div>
+            <div class="a">A: CRUD means create, read, update, and delete. In Spring Boot, I define endpoints in the controller, call service methods for business logic, and use a repository for database access. For example, <code>POST /users</code> creates a user, <code>GET /users/{id}</code> reads one user, <code>PUT /users/{id}</code> updates it, and <code>DELETE /users/{id}</code> removes it. I also return proper HTTP status codes like 201 for create, 200 for reads and updates, and 204 for delete.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: Day 4 - Why should controllers stay thin?</div>
+            <div class="a">A: Controllers should mainly handle HTTP concerns such as request mapping, input binding, validation triggering, and response creation. If business logic is placed inside controllers, code becomes harder to test, reuse, and maintain. I keep decisions such as duplicate checks, search logic, and update rules in the service layer so the architecture stays clean.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: Day 5 - What does <code>JpaRepository</code> give you out of the box?</div>
+            <div class="a">A: <code>JpaRepository</code> provides common database operations such as <code>save</code>, <code>findById</code>, <code>findAll</code>, <code>deleteById</code>, paging, sorting, and count methods. It reduces boilerplate because I do not need to write basic CRUD SQL manually. I can also add custom derived queries like <code>findByEmail</code> or <code>findByNameContainingIgnoreCase</code>.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: Day 6 - Why did you introduce DTOs instead of exposing entities directly?</div>
+            <div class="a">A: DTOs let me control the API contract independently from the database entity. They help me avoid exposing sensitive fields such as passwords, and they are the right place for request validation rules. They also make it easier to change the internal data model later without breaking clients.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: Day 7 - How does validation work in your project?</div>
+            <div class="a">A: I use Bean Validation annotations such as <code>@NotBlank</code>, <code>@Email</code>, and <code>@Size</code> inside request DTOs. In controller methods I use <code>@Valid</code> so Spring validates the request body automatically before business logic runs. If validation fails, the request does not continue to the service layer and the API returns a 400 Bad Request with a structured error message.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: Day 8 - Why use a global exception handler?</div>
+            <div class="a">A: A global exception handler keeps error handling centralized and consistent. Instead of repeating try/catch in every controller, I map exceptions like not found, duplicate resource, validation failure, unauthorized access, and forbidden access into one standard JSON structure. This improves API consistency and makes controllers cleaner.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: Day 9 - Why use H2 for development and PostgreSQL-style settings for production?</div>
+            <div class="a">A: H2 is useful in development because it is fast and easy to run with no external setup. It helps when learning or testing features quickly. PostgreSQL-style configuration is closer to real production behavior, so using profile-based config lets me keep development simple while still preparing the project for more realistic deployment environments.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: Day 10 - Why is Flyway better than relying on automatic schema updates?</div>
+            <div class="a">A: Flyway makes schema changes explicit, versioned, and repeatable. Instead of depending on Hibernate to change the database automatically, I keep migration scripts in source control. That means every environment can move through the same schema history safely, and the team can review database changes just like code changes.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: Day 11 - How do you store passwords securely?</div>
+            <div class="a">A: I never store raw passwords in the database. I hash them using BCrypt through Spring Security's <code>PasswordEncoder</code>. During login, the raw password from the request is compared with the stored hash, and if they match, authentication succeeds. This protects user credentials even if the database is exposed.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: Day 12 - What happens after a user logs in?</div>
+            <div class="a">A: The login endpoint accepts a request with email and password. The service looks up the user, checks the password hash, and if the credentials are valid, it generates a JWT containing claims such as the user email and role. The client then sends that token in the Authorization header on later requests, and the server validates it instead of using session state.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: Day 13 - How do you implement role-based access control?</div>
+            <div class="a">A: I store the user's role, include it in the JWT, and extract it inside the JWT authentication filter. After that, Spring Security places the authenticated user and authorities into the security context. Then I use method-level rules such as <code>@PreAuthorize("hasRole('ADMIN')")</code> to protect admin-only endpoints. That is how the API distinguishes authenticated users from authorized users.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: Day 14 - Why did you add pagination and search?</div>
+            <div class="a">A: Returning every record does not scale well as data grows. Pagination keeps response sizes controlled and reduces memory and database load. Search endpoints improve usability by letting clients filter users by fields like name or email. In Spring Data, <code>Pageable</code> makes this easy because it combines page number, page size, and sorting.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: Day 15 - Why are logging and Swagger useful?</div>
+            <div class="a">A: Logging helps me debug application behavior and follow important events such as login attempts, user creation, and unexpected failures. Swagger or OpenAPI helps document the API, test endpoints quickly, and explain the project clearly in interviews. Together they improve both developer productivity and maintainability.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: Day 16 - What changes between dev and prod profiles in your project?</div>
+            <div class="a">A: In the dev profile I use local-friendly settings like H2, in-memory caching, H2 console access, and seed data for quick testing. In the prod profile I use PostgreSQL-style configuration, safer logging defaults, and I avoid development-only tools and seeded demo data. Profiles help keep one codebase but separate environment behavior cleanly.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: Day 17 - What kinds of tests do you have and how do you measure coverage?</div>
+            <div class="a">A: I use unit tests for service logic, repository tests for JPA behavior, <code>@WebMvcTest</code> for controller slice testing, and <code>@SpringBootTest</code> integration tests for end-to-end request flow. I also added security-focused tests for unauthorized, forbidden, and invalid-token scenarios. For coverage, I use JaCoCo to generate a report so I can see which classes and lines are exercised and where gaps remain.</div>
+        </div>
+
+        <div class="tip">
+            <strong>Interview strategy:</strong> If they ask what changed over 17 days, answer in layers: API basics -> architecture -> persistence -> validation -> security -> observability -> testing.
+        </div>
+
+        <h3>Phase 01 Completion Summary</h3>
+        <div class="qa">
+            <div class="q">Q: What did you finish in Spring Boot Phase 01?</div>
+            <div class="a">A: I completed the core backend learning path: Spring Boot setup, REST APIs, layered architecture, DTOs, validation, exception handling, JPA, Flyway, JWT authentication, role-based authorization, pagination, search, logging, Swagger, profile-based configuration, and multiple testing layers with coverage reporting. I intentionally stopped there because that already covers the fundamentals I need to explain confidently in interviews.</div>
+        </div>
+
+        <div class="qa">
+            <div class="q">Q: Why did you stop the project at this point?</div>
+            <div class="a">A: Because the goal was learning Spring Boot fundamentals, not building an endless feature list. At this point the repository already demonstrates the main concepts a junior backend developer should understand clearly. Adding unrelated features would increase size, but not necessarily improve my understanding of the core stack.</div>
+        </div>
+
+        <h2>13. Rapid Fire Questions</h2>
+        <ul>
+            <li>What is @RestController? Combination of @Controller and @ResponseBody.</li>
+            <li>What is @Service? Marks a business-layer component managed by Spring.</li>
+            <li>What is @Repository? Persistence layer component; can translate persistence exceptions.</li>
+            <li>What is ResponseEntity? Gives control over body, headers, and status code.</li>
+            <li>What is @Valid? Triggers Bean Validation on request objects.</li>
+            <li>What is Pageable? Spring Data abstraction for pagination and sorting.</li>
+            <li>What is @PreAuthorize? Method-level authorization based on expressions and roles.</li>
+            <li>What is application.properties? Externalized configuration file for Spring Boot.</li>
+            <li>What is a bean? An object managed by the Spring container.</li>
+            <li>What is IoC? Inversion of Control; the container manages object creation and wiring.</li>
+        </ul>
+
+        <h2>14. Questions You Can Ask the Interviewer</h2>
+        <ul>
+            <li>How is the backend team structured?</li>
+            <li>How do you handle code reviews and testing?</li>
+            <li>Do you use monoliths, microservices, or a mixed approach?</li>
+            <li>How are deployments handled across environments?</li>
+            <li>What is expected from a developer in the first 3 months?</li>
+        </ul>
+
+        <h2>15. Final Revision Checklist</h2>
+        <ul>
+            <li>Be able to explain one full request flow clearly from controller to database</li>
+            <li>Know why DTOs, services, and repositories are separated</li>
+            <li>Know 400 vs 401 vs 403 vs 404 vs 409 vs 500</li>
+            <li>Know JWT basics and password hashing</li>
+            <li>Know JPA basics and why Flyway is better than ddl-auto update</li>
+            <li>Know test types and where each one fits</li>
+            <li>Be able to explain your own project confidently</li>
+        </ul>
+
+        <div class="footer-note">
+            Prepared for interview revision and aligned to the completed scope of Spring Boot Learning Phase 01. Best used as a speaking guide, not as a script to memorize word-for-word.
+        </div>
+    </div>
+</body>
+</html>
